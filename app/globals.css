@@ -177,3 +177,7 @@
 .btn-glow:hover::before {
   left: 100%;
 }
+    a[href="https://v0.dev"] {
+  display: none !important;
+}
+
