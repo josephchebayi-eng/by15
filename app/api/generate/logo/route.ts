@@ -1,6 +1,26 @@
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
-import { getOpenAIKey } from "@/lib/ai-providers" // Adjust if path differs
+import { createClient } from "@supabase/supabase-js"
+
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
+)
+
+async function getOpenAIKey(): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("settings") // Change to your table name
+    .select("value")
+    .eq("name", "openai")
+    .single()
+
+  if (error) {
+    console.error("❌ Error fetching OpenAI key from Supabase:", error)
+    return null
+  }
+
+  return data?.value || null
+}
 
 export async function POST(req: Request) {
   try {
@@ -10,13 +30,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Prompt is required" }, { status: 400 })
     }
 
-    // Load OpenAI key (from Supabase, env, etc.)
     const apiKey = await getOpenAIKey()
     if (!apiKey) {
       return NextResponse.json(
         {
           success: false,
-          error: "OpenAI API key is not configured.",
+          error: "OpenAI API key not found in Supabase.",
           needsConfiguration: true,
         },
         { status: 503 }
@@ -69,4 +88,3 @@ The logo should be professional, scalable, and look great on websites, merchandi
     )
   }
 }
-
