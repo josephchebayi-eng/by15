@@ -2,7 +2,7 @@ import { generateDesignWithEnhancement, checkProviderAvailability, convertSvgToF
 
 export async function POST(req: Request) {
   try {
-    const { prompt, style, colors, industry, provider = "openrouter", formats = ["svg"] } = await req.json()
+    const { prompt, style, colors, industry, provider = "openai", formats = ["svg"] } = await req.json()
 
     if (!prompt || !prompt.trim()) {
       return Response.json(
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         "logo",
         additionalContext,
         systemPrompt,
-        provider === "openai" && availability.openai ? "openai" : "openrouter",
+        provider === "openrouter" && availability.openrouter ? "openrouter" : "openai",
         2, // Allow up to 2 regenerations for quality
       )
 
