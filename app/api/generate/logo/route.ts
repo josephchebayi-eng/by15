@@ -1,168 +1,110 @@
-import { generateDesignWithEnhancement, checkProviderAvailability, convertSvgToFormats } from "@/lib/ai-providers"
+import { generateDesignWithEnhancement, checkProviderAvailability } from "@/lib/ai-providers"
 
 export async function POST(req: Request) {
   try {
-    const { prompt, style, colors, industry, provider = "openai", formats = ["svg"] } = await req.json()
+    const { prompt, style, colors, industry, provider = "openai", formats = ["png"] } = await req.json()
 
     if (!prompt || !prompt.trim()) {
-      return Response.json(
-        {
-          success: false,
-          error: "Prompt is required",
-        },
-        { status: 400 },
-      )
+      return Response.json({ success: false, error: "Prompt is required" }, { status: 400 })
     }
 
-    // Check if any providers are available
+    // Check provider availability
     const availability = await checkProviderAvailability()
     if (!availability.hasAnyProvider) {
-      return Response.json(
-        {
-          success: false,
-          error: "No AI providers configured. Please set up API keys in the admin panel.",
-          needsConfiguration: true,
-        },
-        { status: 503 },
-      )
+      return Response.json({
+        success: false,
+        error: "No AI providers configured. Please set up API keys in the admin panel.",
+        needsConfiguration: true,
+      }, { status: 503 })
     }
 
-    // Prepare additional context for enhanced prompt generation
+    // Design context
     const additionalContext = {
       style,
       colors,
       industry,
       type: "logo",
-      format: "SVG",
-      requirements: "scalable vector graphics, professional quality",
+      format: "PNG",
+      requirements: "vibrant, full-color, high-res branding image",
       requestedFormats: formats,
     }
 
     try {
-      console.log("🎨 Generating logo with enhanced design prompt and quality checking...")
+      console.log("🎨 Generating vibrant image-based logo using DALL·E...")
 
-      // Use design-focused enhancement for logo generation with quality checking
-      const systemPrompt = `You are a world-class logo designer and brand identity expert with 20+ years of experience. Create professional SVG logo code that is:
+      const systemPrompt = `You are a professional brand designer. Create a bold, colorful, modern logo image for a company. The logo should:
 
-      - Scalable and vector-based with clean, optimized code
-      - Professionally designed with perfect proportions and visual balance
-      - Optimized for various applications (web, print, merchandise, social media)
-      - Following design best practices and brand guidelines
-      - Clean, memorable, and distinctive with strong brand recognition
-      - Technically excellent SVG structure with proper viewBox and dimensions
-      - Compatible with all modern browsers and design software
+- Be visually striking and suitable for a website, social media, and print
+- Include vibrant colors, bold typography, or strong symbolic imagery
+- Reflect the industry: ${industry || "general"}
+- Incorporate style: ${style || "modern and clean"}
+- Follow branding best practices and visual balance
+- Be delivered as a clean, centered logo on a transparent or white background
 
-      IMPORTANT: Return ONLY clean, valid SVG code without any explanations, markdown formatting, or additional text. The SVG should be complete and ready to use.`
+Output only a finished full-color image, no text or explanation.`
 
       const result = await generateDesignWithEnhancement(
         prompt,
         "logo",
         additionalContext,
         systemPrompt,
-        provider === "openrouter" && availability.openrouter ? "openrouter" : "openai",
-        2, // Allow up to 2 regenerations for quality
+        "openai", // Using DALL·E 3
+        1,
       )
 
-      // Clean up the SVG response
-      let svgContent = result.text.trim()
-
-      // Remove markdown code blocks if present
-      svgContent = svgContent
-        .replace(/```svg\n?/g, "")
-        .replace(/```xml\n?/g, "")
-        .replace(/```\n?/g, "")
-
-      // Extract SVG content if wrapped in other text
-      const svgMatch = svgContent.match(/<svg[\s\S]*?<\/svg>/i)
-      if (svgMatch) {
-        svgContent = svgMatch[0]
-      } else if (!svgContent.startsWith("<svg")) {
-        throw new Error("No valid SVG content found in response")
+      const imageUrl = result.imageUrl || result.imageBase64
+      if (!imageUrl) {
+        throw new Error("No image returned from DALL·E")
       }
 
-      // Basic SVG validation
-      if (!svgContent.includes("<svg") || !svgContent.includes("</svg>")) {
-        throw new Error("Invalid SVG structure generated")
-      }
-
-      // Convert to multiple formats if requested
-      const logoFormats = await convertSvgToFormats(svgContent)
-
-      // Prepare response with quality assessment
       const response: any = {
         success: true,
-        svg: svgContent,
-        formats: {
-          svg: svgContent,
-          ...(formats.includes("png") && { png: logoFormats.png }),
-          ...(formats.includes("jpeg") && { jpeg: logoFormats.jpeg }),
-        },
+        image: imageUrl,
         prompt: result.enhancedPrompt,
         provider: result.usedProvider,
         model: result.model,
         fallbackUsed: result.fallbackUsed,
         promptEnhanced: result.promptEnhanced,
         regenerationCount: result.regenerationCount,
-        message: `Generated professional logo using ${result.usedProvider}${result.model ? ` (${result.model})` : ""} with enhanced design brief${result.regenerationCount > 0 ? ` (${result.regenerationCount} regenerations for quality)` : ""}`,
+        message: `Generated vibrant logo using ${result.usedProvider}${result.model ? ` (${result.model})` : ""}`,
       }
 
-      // Include quality assessment if available
       if (result.qualityAssessment) {
-        response.qualityAssessment = {
-          score: result.qualityAssessment.score,
-          meetsRequirements: result.qualityAssessment.meetsRequirements,
-          feedback: result.qualityAssessment.feedback,
-          strengths: result.qualityAssessment.strengths,
-          improvements: result.qualityAssessment.improvements,
-        }
+        response.qualityAssessment = result.qualityAssessment
       }
 
       return Response.json(response)
     } catch (aiError) {
       console.error("❌ Logo generation failed:", aiError)
-
       const errorMessage = aiError instanceof Error ? aiError.message : "Unknown error"
 
       if (errorMessage.includes("quota") || errorMessage.includes("billing")) {
-        return Response.json(
-          {
-            success: false,
-            error: "AI quota exceeded. Please check your billing settings or try again later.",
-            quotaExceeded: true,
-            details: "Please add credits to your AI provider account or upgrade your plan.",
-          },
-          { status: 402 },
-        )
+        return Response.json({
+          success: false,
+          error: "AI quota exceeded. Please check your billing settings or try again later.",
+          quotaExceeded: true,
+        }, { status: 402 })
       }
 
       if (errorMessage.includes("not configured")) {
-        return Response.json(
-          {
-            success: false,
-            error: "AI providers not configured. Please set up API keys in the admin panel.",
-            needsConfiguration: true,
-          },
-          { status: 503 },
-        )
+        return Response.json({
+          success: false,
+          error: "AI providers not configured. Please set up API keys in the admin panel.",
+          needsConfiguration: true,
+        }, { status: 503 })
       }
 
-      return Response.json(
-        {
-          success: false,
-          error: "AI generation service temporarily unavailable. Please try again later.",
-          details: errorMessage,
-        },
-        { status: 503 },
-      )
+      return Response.json({
+        success: false,
+        error: "AI generation service temporarily unavailable. Please try again later.",
+        details: errorMessage,
+      }, { status: 503 })
     }
   } catch (error) {
     console.error("❌ Logo generation error:", error)
-    return Response.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : "Failed to generate logo",
-      },
-      { status: 500 },
-    )
+    return Response.json({
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to generate logo",
+    }, { status: 500 })
   }
 }
