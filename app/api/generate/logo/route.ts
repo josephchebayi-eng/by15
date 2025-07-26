@@ -8,12 +8,12 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!
 )
 
-// ✅ Properly typed function
+// ✅ Fixed to use correct key name
 async function getOpenAIKey(): Promise<string | null> {
   const { data, error } = await supabase
     .from("secrets")
     .select("value")
-    .eq("name", "openai")
+    .eq("name", "openai_api_key") // ✅ Changed from "openai" to "openai_api_key"
     .single()
 
   if (error) {
