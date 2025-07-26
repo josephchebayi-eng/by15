@@ -8,10 +8,10 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!
 )
 
-// ✅ Correctly fetch the OpenAI key from `secrets` table
+// ✅ Properly typed function
 async function getOpenAIKey(): Promise<string | null> {
   const { data, error } = await supabase
-    .from("secrets") // ✅ CHANGED from "settings" to "secrets"
+    .from("secrets")
     .select("value")
     .eq("name", "openai")
     .single()
@@ -24,12 +24,23 @@ async function getOpenAIKey(): Promise<string | null> {
   return data?.value || null
 }
 
+// ✅ Properly typed request interface
+interface LogoRequest {
+  prompt: string
+  style?: string
+  colors?: string
+  industry?: string
+}
+
 export async function POST(req: Request) {
   try {
-    const { prompt, style, colors, industry } = await req.json()
+    const { prompt, style, colors, industry }: LogoRequest = await req.json()
 
     if (!prompt || !prompt.trim()) {
-      return NextResponse.json({ success: false, error: "Prompt is required" }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: "Prompt is required" }, 
+        { status: 400 }
+      )
     }
 
     const apiKey = await getOpenAIKey()
