@@ -8,20 +8,73 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!
 )
 
-// ✅ Fixed to use correct key name
+// ✅ Debug version to see exactly what's in the table
 async function getOpenAIKey(): Promise<string | null> {
-  const { data, error } = await supabase
-    .from("secrets")
-    .select("value")
-    .eq("name", "openai_api_key") // ✅ Changed from "openai" to "openai_api_key"
-    .single()
+  console.log("🔍 Starting getOpenAIKey function...")
+  console.log("📍 Environment variables:")
+  console.log("  SUPABASE_URL exists:", !!process.env.SUPABASE_URL)
+  console.log("  SUPABASE_ANON_KEY exists:", !!process.env.SUPABASE_ANON_KEY)
+  console.log("  SUPABASE_URL value:", process.env.SUPABASE_URL)
+  
+  try {
+    // First, let's see ALL rows in the secrets table
+    console.log("🔍 Querying ALL rows from secrets table...")
+    const { data: allSecrets, error: allError } = await supabase
+      .from("secrets")
+      .select("*")
+    
+    console.log("📋 ALL secrets in table:")
+    console.log("  Data:", JSON.stringify(allSecrets, null, 2))
+    console.log("  Error:", allError)
+    console.log("  Row count:", allSecrets?.length || 0)
 
-  if (error) {
-    console.error("❌ Error fetching OpenAI key from Supabase:", error)
+    if (allSecrets && allSecrets.length > 0) {
+      console.log("🔍 Individual rows:")
+      allSecrets.forEach((row, index) => {
+        console.log(`  Row ${index + 1}:`)
+        console.log(`    name: "${row.name}" (type: ${typeof row.name})`)
+        console.log(`    value exists: ${!!row.value}`)
+        console.log(`    value length: ${row.value?.length || 0}`)
+      })
+    }
+
+    // Now try different variations of the query
+    console.log("🔍 Trying query with 'openai_api_key'...")
+    const { data: data1, error: error1 } = await supabase
+      .from("secrets")
+      .select("value")
+      .eq("name", "openai_api_key")
+      .single()
+
+    console.log("📊 Result for 'openai_api_key':", { data: data1, error: error1 })
+
+    if (data1?.value) {
+      console.log("✅ Found key with 'openai_api_key'")
+      return data1.value
+    }
+
+    // Try 'openai' as fallback
+    console.log("🔍 Trying query with 'openai'...")
+    const { data: data2, error: error2 } = await supabase
+      .from("secrets")
+      .select("value")
+      .eq("name", "openai")
+      .single()
+
+    console.log("📊 Result for 'openai':", { data: data2, error: error2 })
+
+    if (data2?.value) {
+      console.log("✅ Found key with 'openai'")
+      return data2.value
+    }
+
+    console.log("❌ No key found with either name")
+    return null
+
+  } catch (err) {
+    console.error("❌ Catch block error:", err)
     return null
   }
-
-  return data?.value || null
 }
 
 // ✅ Properly typed request interface
