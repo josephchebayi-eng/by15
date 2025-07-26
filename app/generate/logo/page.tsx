@@ -1,15 +1,21 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
+import { Loader2, Sparkles, Star } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 
-export default function LogoGenerator() {
+export default function LogoPage() {
   const [prompt, setPrompt] = useState("")
   const [style, setStyle] = useState("")
   const [colors, setColors] = useState("")
   const [industry, setIndustry] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
 
   const generateLogo = async () => {
     setLoading(true)
@@ -25,92 +31,111 @@ export default function LogoGenerator() {
 
       const data = await res.json()
 
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong.")
+      if (!data.success) {
+        setError(data.error || "Failed to generate image")
+      } else {
+        setImageUrl(data.imageUrl)
       }
-
-      setImageUrl(data.imageUrl)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError("An error occurred while generating the logo.")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Logo Generator</h1>
+    <div className="max-w-xl mx-auto py-10 px-4">
+      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <Sparkles className="w-6 h-6 text-blue-500" />
+        Generate a Vibrant Logo
+      </h1>
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="prompt" className="block font-medium">Business Description</label>
-          <input
+          <Label htmlFor="prompt">Business Description</Label>
+          <Textarea
             id="prompt"
-            type="text"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            placeholder="e.g. A bakery that sells organic cakes"
+            placeholder="E.g. A creative bakery in Nairobi"
           />
         </div>
 
         <div>
-          <label htmlFor="style" className="block font-medium">Style</label>
-          <input
+          <Label htmlFor="style">Style</Label>
+          <Input
             id="style"
-            type="text"
             value={style}
             onChange={(e) => setStyle(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            placeholder="e.g. modern, playful"
+            placeholder="Modern, playful..."
           />
         </div>
 
         <div>
-          <label htmlFor="colors" className="block font-medium">Colors</label>
-          <input
+          <Label htmlFor="colors">Preferred Colors</Label>
+          <Input
             id="colors"
-            type="text"
             value={colors}
             onChange={(e) => setColors(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            placeholder="e.g. pink and white"
+            placeholder="Blue, yellow, pastel tones..."
           />
         </div>
 
         <div>
-          <label htmlFor="industry" className="block font-medium">Industry</label>
-          <input
+          <Label htmlFor="industry">Industry</Label>
+          <Input
             id="industry"
-            type="text"
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            placeholder="e.g. bakery, tech, fashion"
+            placeholder="Bakery, fitness, tech..."
           />
         </div>
 
-        <button
-          onClick={generateLogo}
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? "Generating..." : "Generate Logo"}
-        </button>
+        <Button onClick={generateLogo} disabled={loading}>
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin mr-2 h-4 w-4" />
+              Generating...
+            </>
+          ) : (
+            "Generate Logo"
+          )}
+        </Button>
 
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {error && (
+          <div className="text-red-500 text-sm mt-2">
+            ⚠️ {error}
+          </div>
+        )}
+
+        {imageUrl && (
+          <div className="mt-6">
+            <h3 className="text-sm text-muted-foreground mb-2">Generated Logo Preview</h3>
+            <img
+              src={imageUrl}
+              alt="Generated Logo"
+              className="rounded-lg border shadow max-w-full"
+            />
+
+            <a
+              href={imageUrl}
+              download="logo.png"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center mt-3 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              Download Logo
+            </a>
+          </div>
+        )}
       </div>
 
-      {imageUrl && (
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold mb-2">Generated Logo:</h2>
-          <img
-            src={imageUrl}
-            alt="Generated Logo"
-            className="border border-gray-200 rounded shadow"
-          />
-        </div>
-      )}
+      <div className="mt-10">
+        <Badge className="text-sm flex items-center gap-1">
+          <Star className="w-4 h-4 text-yellow-400" />
+          AI Powered by DALL·E 3
+        </Badge>
+      </div>
     </div>
   )
 }
