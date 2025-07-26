@@ -8,67 +8,47 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!
 )
 
-// ✅ Debug version to see exactly what's in the table
+// ✅ Simplified debug - try without .single() first
 async function getOpenAIKey(): Promise<string | null> {
   console.log("🔍 Starting getOpenAIKey function...")
-  console.log("📍 Environment variables:")
-  console.log("  SUPABASE_URL exists:", !!process.env.SUPABASE_URL)
-  console.log("  SUPABASE_ANON_KEY exists:", !!process.env.SUPABASE_ANON_KEY)
-  console.log("  SUPABASE_URL value:", process.env.SUPABASE_URL)
   
   try {
-    // First, let's see ALL rows in the secrets table
-    console.log("🔍 Querying ALL rows from secrets table...")
-    const { data: allSecrets, error: allError } = await supabase
+    // Try to get ALL rows first (no .single())
+    const { data: allRows, error: allError } = await supabase
       .from("secrets")
       .select("*")
+
+    console.log("📋 Query result:", {
+      data: allRows,
+      error: allError,
+      rowCount: allRows?.length || 0
+    })
+
+    if (allError) {
+      console.error("❌ Error querying secrets table:", allError)
+      return null
+    }
+
+    if (!allRows || allRows.length === 0) {
+      console.log("❌ No rows found in secrets table")
+      return null
+    }
+
+    // Look for OpenAI key in different possible name formats
+    const possibleNames = ['openai_api_key', 'openai', 'OPENAI_API_KEY', 'OpenAI_API_Key']
     
-    console.log("📋 ALL secrets in table:")
-    console.log("  Data:", JSON.stringify(allSecrets, null, 2))
-    console.log("  Error:", allError)
-    console.log("  Row count:", allSecrets?.length || 0)
-
-    if (allSecrets && allSecrets.length > 0) {
-      console.log("🔍 Individual rows:")
-      allSecrets.forEach((row, index) => {
-        console.log(`  Row ${index + 1}:`)
-        console.log(`    name: "${row.name}" (type: ${typeof row.name})`)
-        console.log(`    value exists: ${!!row.value}`)
-        console.log(`    value length: ${row.value?.length || 0}`)
-      })
+    for (const name of possibleNames) {
+      const found = allRows.find(row => row.name === name)
+      if (found && found.value) {
+        console.log(`✅ Found OpenAI key with name: "${name}"`)
+        console.log(`✅ Key length: ${found.value.length}`)
+        return found.value
+      }
     }
 
-    // Now try different variations of the query
-    console.log("🔍 Trying query with 'openai_api_key'...")
-    const { data: data1, error: error1 } = await supabase
-      .from("secrets")
-      .select("value")
-      .eq("name", "openai_api_key")
-      .single()
-
-    console.log("📊 Result for 'openai_api_key':", { data: data1, error: error1 })
-
-    if (data1?.value) {
-      console.log("✅ Found key with 'openai_api_key'")
-      return data1.value
-    }
-
-    // Try 'openai' as fallback
-    console.log("🔍 Trying query with 'openai'...")
-    const { data: data2, error: error2 } = await supabase
-      .from("secrets")
-      .select("value")
-      .eq("name", "openai")
-      .single()
-
-    console.log("📊 Result for 'openai':", { data: data2, error: error2 })
-
-    if (data2?.value) {
-      console.log("✅ Found key with 'openai'")
-      return data2.value
-    }
-
-    console.log("❌ No key found with either name")
+    console.log("❌ No OpenAI key found. Available names:", 
+      allRows.map(row => `"${row.name}"`).join(', '))
+    
     return null
 
   } catch (err) {
