@@ -2,14 +2,16 @@ import { NextResponse } from "next/server"
 import OpenAI from "openai"
 import { createClient } from "@supabase/supabase-js"
 
+// Supabase client
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_ANON_KEY!
 )
 
+// ✅ Correctly fetch the OpenAI key from `secrets` table
 async function getOpenAIKey(): Promise<string | null> {
   const { data, error } = await supabase
-    .from("settings") // Change to your table name
+    .from("secrets") // ✅ CHANGED from "settings" to "secrets"
     .select("value")
     .eq("name", "openai")
     .single()
