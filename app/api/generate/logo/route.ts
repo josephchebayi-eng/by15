@@ -1,20 +1,22 @@
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
-import { createClient } from "@supabase/supabase-js"
 
-// Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
-)
+// Import the configured Supabase client
+import { supabaseAdmin } from "@/lib/supabase"
 
 // ✅ Simplified debug - try without .single() first
 async function getOpenAIKey(): Promise<string | null> {
   console.log("🔍 Starting getOpenAIKey function...")
   
   try {
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.log("❌ Supabase not configured")
+      return null
+    }
+
     // Try to get ALL rows first (no .single())
-    const { data: allRows, error: allError } = await supabase
+    const { data: allRows, error: allError } = await supabaseAdmin
       .from("secrets")
       .select("*")
 
@@ -123,12 +125,13 @@ The logo should be professional, scalable, and look great on websites, merchandi
       model: "dall-e-3",
       message: "Logo image generated using DALL·E 3",
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Logo generation error:", error)
+    const errorMessage = error instanceof Error ? error.message : "Image generation failed."
     return NextResponse.json(
       {
         success: false,
-        error: error?.message || "Image generation failed.",
+        error: errorMessage,
       },
       { status: 500 }
     )

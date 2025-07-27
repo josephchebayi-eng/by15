@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function LogoGeneratorPage() {
   const [prompt, setPrompt] = useState("")
@@ -39,7 +40,7 @@ export default function LogoGeneratorPage() {
       } else {
         setImageUrl(data.imageUrl)
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred while generating the logo.")
     } finally {
       setLoading(false)
@@ -75,8 +76,8 @@ export default function LogoGeneratorPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">AI Logo Generator</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">AI Logo Generator</h1>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Craft unique and professional brand logos with AI. Describe your brand and let the magic happen.
           </p>
         </div>
@@ -177,9 +178,11 @@ export default function LogoGeneratorPage() {
             <CardContent>
               <div className="aspect-square bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                 {imageUrl ? (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt="Generated Logo"
+                    width={512}
+                    height={512}
                     className="max-w-full max-h-full object-contain rounded-lg"
                   />
                 ) : (
@@ -192,16 +195,21 @@ export default function LogoGeneratorPage() {
 
               {imageUrl && (
                 <div className="mt-6 space-y-4">
-                  <a
-                    href={imageUrl}
-                    download="logo.png"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-full px-4 py-2 bg-transparent text-white border rounded hover:bg-blue-700 transition"
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-blue-500/40 text-blue-400 hover:bg-blue-500/20"
                   >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Logo
-                  </a>
+                    <a
+                      href={imageUrl}
+                      download="logo.png"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Logo
+                    </a>
+                  </Button>
                   <Button
                     onClick={generateLogo}
                     disabled={loading}

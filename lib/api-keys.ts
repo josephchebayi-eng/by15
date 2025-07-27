@@ -7,6 +7,15 @@ interface ApiKeys {
 
 export async function getApiKeys(): Promise<ApiKeys> {
   try {
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.warn("Supabase not configured - returning empty API keys")
+      return {
+        openai_api_key: "",
+        openrouter_api_key: "",
+      }
+    }
+
     // Get API keys from Supabase secrets/vault
     const { data: openaiKey, error: openaiError } = await supabaseAdmin
       .from("secrets")
@@ -44,6 +53,11 @@ export async function getApiKeys(): Promise<ApiKeys> {
 
 export async function setApiKey(name: string, value: string): Promise<void> {
   try {
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      throw new Error("Supabase not configured - cannot store API key")
+    }
+
     const { error } = await supabaseAdmin.from("secrets").upsert({ name, value }, { onConflict: "name" })
 
     if (error) {
