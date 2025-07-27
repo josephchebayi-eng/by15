@@ -10,11 +10,11 @@ const isSupabaseConfigured = !!supabaseUrl
 // Server-side client with service role key for accessing secrets
 export const supabaseAdmin = isSupabaseConfigured 
   ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    })
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+})
   : null
 
 // Client-side client for regular operations

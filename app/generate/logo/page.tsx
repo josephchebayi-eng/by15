@@ -200,15 +200,15 @@ export default function LogoGeneratorPage() {
                     variant="outline"
                     className="w-full border-blue-500/40 text-blue-400 hover:bg-blue-500/20"
                   >
-                    <a
-                      href={imageUrl}
-                      download="logo.png"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Logo
-                    </a>
+                  <a
+                    href={imageUrl}
+                    download="logo.png"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Logo
+                  </a>
                   </Button>
                   <Button
                     onClick={generateLogo}
