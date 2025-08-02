@@ -2,7 +2,6 @@ import {
   generateWithFallback,
   generateImageWithFallback,
   checkProviderAvailability,
-  testOpenRouterConnection,
 } from "@/lib/ai-providers"
 
 export async function GET() {
@@ -13,25 +12,20 @@ export async function GET() {
     const availability = await checkProviderAvailability()
     console.log("📊 Provider availability:", availability)
 
-    // Test OpenRouter connection
-    const openRouterTest = await testOpenRouterConnection()
-    console.log("🔗 OpenRouter test:", openRouterTest)
-
     const testResults = {
       timestamp: new Date().toISOString(),
       availability,
-      openRouterTest,
       moduleTests: {} as Record<string, any>,
     }
 
     // Test each AI module
     const modules = [
-      { name: "logo", taskType: "technical" as const, prompt: "Create a simple tech company logo" },
-      { name: "slogan", taskType: "creative" as const, prompt: "Create a slogan for TechCorp" },
-      { name: "tagline", taskType: "strategy" as const, prompt: "Create a tagline for TechCorp" },
-      { name: "brandname", taskType: "creative" as const, prompt: "Generate brand names for tech startup" },
-      { name: "banner", taskType: "visual" as const, prompt: "Create a banner design description" },
-      { name: "poster", taskType: "visual" as const, prompt: "Create a poster design description" },
+      { name: "logo", prompt: "Create a simple tech company logo" },
+      { name: "slogan", prompt: "Create a slogan for TechCorp" },
+      { name: "tagline", prompt: "Create a tagline for TechCorp" },
+      { name: "brandname", prompt: "Generate brand names for tech startup" },
+      { name: "banner", prompt: "Create a banner design description" },
+      { name: "poster", prompt: "Create a poster design description" },
     ]
 
     for (const module of modules) {
@@ -42,8 +36,6 @@ export async function GET() {
         const result = await generateWithFallback(
           module.prompt,
           `You are testing the ${module.name} generation system. Provide a brief test response.`,
-          "openrouter", // Use OpenRouter since OpenAI quota is exceeded
-          module.taskType,
           false, // Skip prompt enhancement for tests
         )
         const endTime = Date.now()
@@ -72,7 +64,7 @@ export async function GET() {
     // Test image generation (will likely fail due to OpenAI quota, but test the fallback)
     try {
       console.log("🖼️ Testing image generation...")
-      const imageResult = await generateImageWithFallback("A simple test image", "1024x1024", false)
+      const imageResult = await generateImageWithFallback("A simple test image", "1024x1024")
       testResults.moduleTests["image"] = {
         status: "success",
         provider: imageResult.usedProvider,

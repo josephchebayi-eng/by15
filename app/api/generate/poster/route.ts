@@ -2,7 +2,7 @@ import { generateImageWithFallback, generateDesignWithEnhancement, checkProvider
 
 export async function POST(req: Request) {
   try {
-    const { prompt, size, style, colors, text: posterText, provider = "openai" } = await req.json()
+    const { prompt, size, style, colors, text: posterText } = await req.json()
 
     // Check if any providers are available
     const availability = await checkProviderAvailability()
@@ -35,48 +35,17 @@ export async function POST(req: Request) {
     let enhancedPrompt: string | undefined
 
     try {
-      // Always try image generation first if OpenAI is available
-      if (availability.openai) {
-        console.log("🎨 Attempting poster image generation with enhanced prompt...")
-        const result = await generateImageWithFallback(prompt, "1024x1792", "poster", additionalContext)
-        imageUrl = result.imageUrl
-        usedProvider = result.usedProvider
-        fallbackUsed = result.fallbackUsed
-        isPlaceholder = result.isPlaceholder || false
-        description = result.description
-        enhancedPrompt = result.enhancedPrompt
-      } else {
-        console.log("🎨 OpenAI not available, generating enhanced visual description with OpenRouter...")
-
-        // Generate detailed description for poster using design-focused enhancement
-        const systemPrompt = `You are a world-class poster designer with expertise in visual communication, typography, and print design. Create comprehensive visual descriptions that could be used by a designer to create professional posters.
-
-        Focus on:
-        - Visual hierarchy and composition
-        - Typography and text treatment
-        - Color psychology and impact
-        - Print production requirements
-        - Marketing effectiveness
-        - Brand consistency`
-
-        const result = await generateDesignWithEnhancement(
-          prompt,
-          "poster",
-          additionalContext,
-          systemPrompt,
-          "openrouter",
-        )
-
-        imageUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent("AI-Generated Poster Design")}`
-        usedProvider = result.usedProvider
-        fallbackUsed = result.fallbackUsed
-        model = result.model
-        isPlaceholder = true
-        description = result.text
-        enhancedPrompt = result.enhancedPrompt
-      }
+      console.log("🎨 Attempting poster image generation with enhanced prompt...")
+      const result = await generateImageWithFallback(prompt, "1024x1792", "poster", additionalContext)
+      imageUrl = result.imageUrl
+      usedProvider = result.usedProvider
+      fallbackUsed = result.fallbackUsed
+      isPlaceholder = result.isPlaceholder || false
+      description = result.description
+      enhancedPrompt = result.enhancedPrompt
+      model = "dall-e-3"
     } catch (aiError) {
-      console.error("❌ AI generation failed:", aiError)
+      console.error("❌ OpenAI generation failed:", aiError)
 
       // Create a helpful error message based on the error type
       const errorMessage = aiError instanceof Error ? aiError.message : "Unknown error"
@@ -95,7 +64,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          error: "AI generation service temporarily unavailable. Please try again later.",
+          error: "OpenAI generation service temporarily unavailable. Please try again later.",
           details: errorMessage,
         },
         { status: 503 },
@@ -119,8 +88,8 @@ export async function POST(req: Request) {
       response.message = `Generated comprehensive design brief using ${usedProvider}${model ? ` (${model})` : ""} - Use this detailed description to create your poster`
     } else {
       response.message = fallbackUsed
-        ? `Generated using ${usedProvider}${model ? ` (${model})` : ""} with enhanced design prompt`
-        : `Generated using ${usedProvider}${model ? ` (${model})` : ""} with enhanced design prompt`
+        ? `Generated using ${usedProvider}${model ? ` (${model})` : ""} with fallback`
+        : `Generated using ${usedProvider}${model ? ` (${model})` : ""}`
     }
 
     return Response.json(response)

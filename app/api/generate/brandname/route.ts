@@ -2,7 +2,7 @@ import { generateWithFallback, checkProviderAvailability } from "@/lib/ai-provid
 
 export async function POST(req: Request) {
   try {
-    const { industry, style, keywords, description, provider = "openai", enhancePrompt = true } = await req.json()
+    const { industry, style, keywords, description, enhancePrompt = true } = await req.json()
 
     // Check if any providers are available
     const availability = await checkProviderAvailability()
@@ -61,12 +61,9 @@ export async function POST(req: Request) {
     let enhancedPrompt: string | undefined
 
     try {
-      // Use 'creative' task type for brand name generation with prompt enhancement
       const result = await generateWithFallback(
         basePrompt,
         systemPrompt,
-        provider as "openai" | "openrouter",
-        "creative",
         enhancePrompt,
       )
       namesText = result.text
@@ -76,12 +73,12 @@ export async function POST(req: Request) {
       promptEnhanced = result.promptEnhanced
       enhancedPrompt = result.enhancedPrompt
     } catch (aiError) {
-      console.error("All AI providers failed:", aiError)
+      console.error("OpenAI generation failed:", aiError)
 
       return Response.json(
         {
           success: false,
-          error: "AI generation service temporarily unavailable. All providers failed. Please try again later.",
+          error: "AI generation service temporarily unavailable. Please try again later.",
         },
         { status: 503 },
       )
@@ -113,7 +110,7 @@ export async function POST(req: Request) {
       model,
       fallbackUsed,
       promptEnhanced,
-      message: `Generated using ${usedProvider}${model ? ` (${model})` : ""} - creative naming AI${promptEnhanced ? " with enhanced prompt" : ""}`,
+      message: `Generated using ${usedProvider}${model ? ` (${model})` : ""}${promptEnhanced ? " with enhanced prompt" : ""}`,
     })
   } catch (error) {
     console.error("Brand name generation error:", error)

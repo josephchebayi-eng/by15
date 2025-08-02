@@ -2,7 +2,7 @@ import { generateDesignWithEnhancement, checkProviderAvailability } from "@/lib/
 
 export async function POST(req: Request) {
   try {
-    const { prompt, tone, industry, targetAudience, provider = "openrouter" } = await req.json()
+    const { prompt, tone, industry, targetAudience } = await req.json()
 
     if (!prompt || !prompt.trim()) {
       return Response.json(
@@ -61,7 +61,6 @@ export async function POST(req: Request) {
         "slogan",
         additionalContext,
         systemPrompt,
-        provider === "openai" && availability.openai ? "openai" : "openrouter",
         1, // Allow 1 regeneration for quality
       )
 
@@ -89,7 +88,7 @@ export async function POST(req: Request) {
         fallbackUsed: result.fallbackUsed,
         promptEnhanced: result.promptEnhanced,
         regenerationCount: result.regenerationCount,
-        message: `Generated ${slogans.length} professional slogans using ${result.usedProvider}${result.model ? ` (${result.model})` : ""} with enhanced creative brief${result.regenerationCount > 0 ? ` (${result.regenerationCount} regenerations for quality)` : ""}`,
+        message: `Generated ${slogans.length} professional slogans using ${result.usedProvider}${result.model ? ` (${result.model})` : ""}${result.regenerationCount > 0 ? ` (${result.regenerationCount} regenerations for quality)` : ""}`,
       }
 
       // Include quality assessment if available
@@ -113,7 +112,7 @@ export async function POST(req: Request) {
         return Response.json(
           {
             success: false,
-            error: "AI quota exceeded. Please check your billing settings or try again later.",
+            error: "OpenAI quota exceeded. Please check your billing settings or try again later.",
             quotaExceeded: true,
           },
           { status: 402 },
@@ -124,7 +123,7 @@ export async function POST(req: Request) {
         return Response.json(
           {
             success: false,
-            error: "AI providers not configured. Please set up API keys in the admin panel.",
+            error: "OpenAI API key not configured. Please set up API key in the admin panel.",
             needsConfiguration: true,
           },
           { status: 503 },
@@ -134,7 +133,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          error: "AI generation service temporarily unavailable. Please try again later.",
+          error: "OpenAI generation service temporarily unavailable. Please try again later.",
           details: errorMessage,
         },
         { status: 503 },

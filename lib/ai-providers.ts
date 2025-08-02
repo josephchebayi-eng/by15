@@ -2,110 +2,6 @@ import { generateText } from "ai"
 import { createOpenAI } from "@ai-sdk/openai"
 import { getApiKeys } from "./api-keys"
 
-// Enhanced task-specific model configurations with more high-performing models
-const TASK_MODELS = {
-  // Creative text generation (slogans, taglines, brand names)
-  creative: [
-    "anthropic/claude-3.5-sonnet", // Best for creative writing
-    "openai/gpt-4o", // Excellent creativity
-    "deepseek/deepseek-chat", // Excellent creative capabilities
-    "qwen/qwen-2.5-72b-instruct", // Strong creative reasoning
-    "meta-llama/llama-3.1-70b-instruct", // Good creative capabilities
-    "mistralai/mistral-large", // Strong creative performance
-    "google/gemini-pro-1.5", // Good creative output
-    "anthropic/claude-3-haiku", // Fast creative responses
-    "openai/gpt-3.5-turbo", // Reliable fallback
-    "meta-llama/llama-3.1-8b-instruct:free", // Free creative option
-    "google/gemma-2-9b-it:free", // Free creative fallback
-  ],
-
-  // Technical/structured content (SVG code, detailed descriptions)
-  technical: [
-    "openai/gpt-4o", // Best for code generation
-    "anthropic/claude-3.5-sonnet", // Excellent at structured output
-    "deepseek/deepseek-coder", // Specialized coding model
-    "qwen/qwen-2.5-coder-32b-instruct", // Strong coding capabilities
-    "meta-llama/llama-3.1-70b-instruct", // Good technical capabilities
-    "mistralai/codestral", // Code-specialized model
-    "google/gemini-pro-1.5", // Good technical output
-    "anthropic/claude-3-haiku", // Fast technical responses
-    "openai/gpt-3.5-turbo", // Reliable fallback
-    "meta-llama/llama-3.1-8b-instruct:free", // Free technical option
-    "deepseek/deepseek-coder:free", // Free coding model
-  ],
-
-  // Visual descriptions (for image generation prompts)
-  visual: [
-    "anthropic/claude-3.5-sonnet", // Excellent visual understanding
-    "openai/gpt-4o", // Great visual descriptions
-    "google/gemini-pro-vision", // Specialized visual model
-    "qwen/qwen-2.5-72b-instruct", // Strong visual reasoning
-    "meta-llama/llama-3.1-70b-instruct", // Good visual capabilities
-    "mistralai/mistral-large", // Good visual descriptions
-    "anthropic/claude-3-haiku", // Fast visual responses
-    "openai/gpt-3.5-turbo", // Fallback
-    "meta-llama/llama-3.1-8b-instruct:free", // Free visual option
-    "google/gemma-2-9b-it:free", // Free visual fallback
-  ],
-
-  // Brand strategy (positioning, analysis)
-  strategy: [
-    "anthropic/claude-3.5-sonnet", // Best for strategic thinking
-    "openai/gpt-4o", // Excellent reasoning
-    "qwen/qwen-2.5-72b-instruct", // Strong analytical capabilities
-    "deepseek/deepseek-chat", // Good strategic reasoning
-    "meta-llama/llama-3.1-70b-instruct", // Good analytical skills
-    "mistralai/mistral-large", // Strong strategic thinking
-    "google/gemini-pro-1.5", // Good strategic analysis
-    "anthropic/claude-3-haiku", // Fast strategic responses
-    "openai/gpt-3.5-turbo", // Fallback
-    "meta-llama/llama-3.1-8b-instruct:free", // Free strategic option
-  ],
-
-  // General purpose
-  general: [
-    "openai/gpt-3.5-turbo", // Fast and reliable
-    "anthropic/claude-3-haiku", // Fast responses
-    "qwen/qwen-2.5-72b-instruct", // High quality free option
-    "meta-llama/llama-3.1-8b-instruct:free", // Free option
-    "google/gemma-2-9b-it:free", // Free alternative
-    "deepseek/deepseek-chat:free", // Free high-quality option
-  ],
-}
-
-// Enhanced model pricing tiers with new models
-const MODEL_TIERS = {
-  premium: [
-    "anthropic/claude-3.5-sonnet",
-    "openai/gpt-4o",
-    "mistralai/mistral-large",
-    "google/gemini-pro-1.5",
-    "google/gemini-pro-vision",
-  ],
-  standard: [
-    "qwen/qwen-2.5-72b-instruct",
-    "meta-llama/llama-3.1-70b-instruct",
-    "deepseek/deepseek-chat",
-    "deepseek/deepseek-coder",
-    "qwen/qwen-2.5-coder-32b-instruct",
-    "mistralai/codestral",
-    "anthropic/claude-3-haiku",
-    "openai/gpt-3.5-turbo",
-  ],
-  free: [
-    "meta-llama/llama-3.1-8b-instruct:free",
-    "google/gemma-2-9b-it:free",
-    "deepseek/deepseek-chat:free",
-    "deepseek/deepseek-coder:free",
-    "qwen/qwen-2.5-7b-instruct:free",
-    "microsoft/wizardlm-2-8x22b:free",
-    "mistralai/mistral-7b-instruct:free",
-  ],
-}
-
-// Task type definitions
-export type TaskType = "creative" | "technical" | "visual" | "strategy" | "general"
-
 // Quality assessment interface
 export interface QualityAssessment {
   score: number // 1-10 scale
@@ -221,13 +117,13 @@ class AIQualityChecker {
 
       Provide a comprehensive quality assessment:`
 
-      const { openrouter_api_key } = await getApiKeys()
-      if (!openrouter_api_key) {
-        console.warn("⚠️ OpenRouter not available for quality assessment")
+      const { openai_api_key } = await getApiKeys()
+      if (!openai_api_key) {
+        console.warn("⚠️ OpenAI not available for quality assessment")
         return {
           score: 7,
           meetsRequirements: true,
-          feedback: "Quality assessment unavailable - OpenRouter not configured",
+          feedback: "Quality assessment unavailable - OpenAI not configured",
           improvements: [],
           shouldRegenerate: false,
           strengths: ["Generated successfully"],
@@ -235,23 +131,7 @@ class AIQualityChecker {
         }
       }
 
-      const client = createOpenRouterClient(openrouter_api_key)
-      const messages = [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: assessmentPrompt },
-      ]
-
-      const response = await client.chat.completions.create({
-        model: "anthropic/claude-3.5-sonnet", // Use premium model for quality assessment
-        messages,
-        max_tokens: 1000,
-        temperature: 0.2, // Low temperature for consistent evaluation
-      })
-
-      const assessmentText = response.choices[0]?.message?.content?.trim()
-      if (!assessmentText) {
-        throw new Error("Empty assessment response")
-      }
+      const assessmentText = await generateWithOpenAI(assessmentPrompt, systemPrompt)
 
       // Try to parse JSON response
       try {
@@ -448,7 +328,6 @@ class PromptEnhancer {
     additionalContext?: any,
   ): Promise<{ enhancedPrompt: string; enhancementUsed: boolean }> {
     try {
-      // Always enhance for design tasks - convert user input to professional design brief
       console.log(`🎨 Converting ${designType} prompt to detailed design description...`)
 
       const enhancementSystemPrompt = `You are a senior creative director and design strategist with 15+ years of experience in brand design and marketing. Your expertise spans visual design, brand strategy, and creative direction.
@@ -474,27 +353,13 @@ class PromptEnhancer {
 
       Transform this into a comprehensive professional design brief:`
 
-      // Use OpenRouter for enhancement with a high-quality model
-      const { openrouter_api_key } = await getApiKeys()
-      if (!openrouter_api_key) {
-        console.warn("⚠️ OpenRouter not available for prompt enhancement, using original prompt")
+      const { openai_api_key } = await getApiKeys()
+      if (!openai_api_key) {
+        console.warn("⚠️ OpenAI not available for prompt enhancement, using original prompt")
         return { enhancedPrompt: originalPrompt, enhancementUsed: false }
       }
 
-      const client = createOpenRouterClient(openrouter_api_key)
-      const messages = [
-        { role: "system", content: enhancementSystemPrompt },
-        { role: "user", content: enhancementPrompt },
-      ]
-
-      const response = await client.chat.completions.create({
-        model: "anthropic/claude-3.5-sonnet", // Use premium model for enhancement
-        messages,
-        max_tokens: 1500, // Increased for detailed descriptions
-        temperature: 0.4, // Balanced creativity and consistency
-      })
-
-      const enhancedPrompt = response.choices[0]?.message?.content?.trim()
+      const enhancedPrompt = await generateWithOpenAI(enhancementPrompt, enhancementSystemPrompt)
 
       if (enhancedPrompt && enhancedPrompt.length > originalPrompt.length) {
         console.log(
@@ -509,95 +374,6 @@ class PromptEnhancer {
       console.warn("⚠️ Prompt enhancement failed, using original:", error)
       return { enhancedPrompt: originalPrompt, enhancementUsed: false }
     }
-  }
-
-  // Legacy method for backward compatibility
-  static async enhancePrompt(
-    originalPrompt: string,
-    taskType: TaskType,
-    systemPrompt?: string,
-  ): Promise<{ enhancedPrompt: string; enhancementUsed: boolean }> {
-    // Map task types to design types for enhanced processing
-    const taskToDesignMap: Record<TaskType, "logo" | "banner" | "poster" | "slogan" | "tagline" | "brandname"> = {
-      visual: "poster",
-      creative: "slogan",
-      technical: "logo",
-      strategy: "tagline",
-      general: "banner",
-    }
-
-    const designType = taskToDesignMap[taskType] || "banner"
-    return this.enhancePromptToDesignDescription(originalPrompt, designType)
-  }
-}
-
-// Improved OpenRouter configuration
-const createOpenRouterClient = (apiKey: string) => {
-  return {
-    chat: {
-      completions: {
-        create: async (params: any) => {
-          console.log("🔄 OpenRouter request:", {
-            model: params.model,
-            messageCount: params.messages?.length,
-            maxTokens: params.max_tokens,
-          })
-
-          const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-              "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-              "X-Title": "BrandForge AI",
-            },
-            body: JSON.stringify({
-              model: params.model,
-              messages: params.messages,
-              max_tokens: params.max_tokens || 1000,
-              temperature: params.temperature || 0.7,
-              stream: false,
-            }),
-          })
-
-          console.log("📡 OpenRouter response status:", response.status)
-
-          if (!response.ok) {
-            const errorText = await response.text()
-            console.error("❌ OpenRouter error response:", errorText)
-
-            let errorData
-            try {
-              errorData = JSON.parse(errorText)
-            } catch {
-              errorData = { error: { message: errorText } }
-            }
-
-            // Provide specific error messages
-            let errorMessage = `OpenRouter API error (${response.status})`
-
-            if (response.status === 401) {
-              errorMessage = "OpenRouter API key is invalid or expired"
-            } else if (response.status === 403) {
-              errorMessage = "OpenRouter access forbidden - check account permissions"
-            } else if (response.status === 429) {
-              errorMessage = "OpenRouter rate limit exceeded"
-            } else if (response.status === 400) {
-              errorMessage = `OpenRouter bad request: ${errorData.error?.message || "Invalid parameters"}`
-            } else if (errorData.error?.message) {
-              errorMessage = `OpenRouter: ${errorData.error.message}`
-            }
-
-            throw new Error(errorMessage)
-          }
-
-          const data = await response.json()
-          console.log("✅ OpenRouter response received successfully")
-
-          return data
-        },
-      },
-    },
   }
 }
 
@@ -638,101 +414,10 @@ export async function generateWithOpenAI(prompt: string, systemPrompt?: string) 
   }
 }
 
-export async function generateWithOpenRouter(
-  prompt: string,
-  taskType: TaskType = "general",
-  systemPrompt?: string,
-  preferTier: "premium" | "standard" | "free" = "premium",
-) {
-  try {
-    const { openrouter_api_key } = await getApiKeys()
-
-    if (!openrouter_api_key) {
-      throw new Error("OpenRouter API key not configured")
-    }
-
-    console.log(`🔄 Attempting OpenRouter generation for task: ${taskType}, tier: ${preferTier}`)
-
-    const client = createOpenRouterClient(openrouter_api_key)
-
-    const messages = []
-    if (systemPrompt) {
-      messages.push({ role: "system", content: systemPrompt })
-    }
-    messages.push({ role: "user", content: prompt })
-
-    // Get task-specific models
-    let modelsToTry = TASK_MODELS[taskType] || TASK_MODELS.general
-
-    // Filter by preferred tier if specified
-    if (preferTier !== "premium") {
-      const tierModels = MODEL_TIERS[preferTier]
-      const filteredModels = modelsToTry.filter((model) => tierModels.includes(model))
-
-      // If we have models in the preferred tier, use them first
-      if (filteredModels.length > 0) {
-        modelsToTry = [...filteredModels, ...modelsToTry.filter((model) => !tierModels.includes(model))]
-      }
-    }
-
-    console.log(`🎯 Models to try for ${taskType}:`, modelsToTry.slice(0, 3)) // Log first 3 models
-
-    let lastError: Error | null = null
-
-    for (const model of modelsToTry) {
-      try {
-        console.log(`🔄 Trying OpenRouter model: ${model}`)
-
-        // Adjust temperature based on task type
-        const temperature = taskType === "creative" ? 0.8 : taskType === "technical" ? 0.3 : 0.7
-
-        const response = await client.chat.completions.create({
-          model,
-          messages,
-          max_tokens: 1000,
-          temperature,
-        })
-
-        const content = response.choices[0]?.message?.content
-        if (!content) {
-          throw new Error("OpenRouter returned empty response")
-        }
-
-        console.log(`✅ Success with model: ${model} for task: ${taskType}`)
-        return { text: content, model }
-      } catch (modelError) {
-        const errorMsg = modelError instanceof Error ? modelError.message : String(modelError)
-        console.warn(`⚠️ Model ${model} failed:`, errorMsg)
-        lastError = modelError instanceof Error ? modelError : new Error(errorMsg)
-
-        // If it's a rate limit, quota error, or model unavailable, try next model immediately
-        if (
-          errorMsg.includes("rate limit") ||
-          errorMsg.includes("quota") ||
-          errorMsg.includes("unavailable") ||
-          errorMsg.includes("not found")
-        ) {
-          continue
-        }
-
-        // For other errors, also continue to next model
-        continue
-      }
-    }
-
-    throw lastError || new Error(`All OpenRouter models failed for task: ${taskType}`)
-  } catch (error) {
-    console.error("❌ OpenRouter generation error:", error)
-    throw error
-  }
-}
-
-// Enhanced fallback function with design-focused prompt enhancement
+// Simplified generation function using only OpenAI
 export async function generateWithFallback(
   originalPrompt: string,
   systemPrompt?: string,
-  preferredProvider: "openai" | "openrouter" = "openai",
-  taskType: TaskType = "general",
   enhancePrompt = true,
 ): Promise<{
   text: string
@@ -742,83 +427,56 @@ export async function generateWithFallback(
   promptEnhanced: boolean
   enhancedPrompt?: string
 }> {
-  console.log(`🚀 Starting generation for task: ${taskType} with preferred provider: ${preferredProvider}`)
+  console.log(`🚀 Starting generation with OpenAI`)
 
-  // Enhance the prompt if requested - now creates detailed design descriptions
+  // Enhance the prompt if requested
   let finalPrompt = originalPrompt
   let promptEnhanced = false
   let enhancedPrompt: string | undefined
 
   if (enhancePrompt) {
     try {
-      const enhancement = await PromptEnhancer.enhancePrompt(originalPrompt, taskType, systemPrompt)
+      // For backward compatibility, we'll use a simple enhancement
+      const enhancement = await PromptEnhancer.enhancePromptToDesignDescription(
+        originalPrompt,
+        "banner", // Default design type for general enhancement
+      )
       finalPrompt = enhancement.enhancedPrompt
       promptEnhanced = enhancement.enhancementUsed
       if (promptEnhanced) {
         enhancedPrompt = finalPrompt
-        console.log(`🎨 Prompt enhanced for ${taskType} task - converted to detailed design description`)
+        console.log(`🎨 Prompt enhanced - converted to detailed design description`)
       }
     } catch (enhancementError) {
       console.warn("⚠️ Prompt enhancement failed, using original prompt:", enhancementError)
     }
   }
 
-  const providers = preferredProvider === "openai" ? ["openai", "openrouter"] : ["openrouter", "openai"]
-  const errors: { provider: string; error: string }[] = []
+  try {
+    console.log(`🔄 Attempting generation with OpenAI...`)
 
-  for (let i = 0; i < providers.length; i++) {
-    const provider = providers[i]
-    const isFirstChoice = i === 0
+    const text = await generateWithOpenAI(finalPrompt, systemPrompt)
 
-    try {
-      console.log(`🔄 Attempting generation with ${provider}...`)
-
-      let text: string
-      let model: string | undefined
-
-      if (provider === "openai") {
-        text = await generateWithOpenAI(finalPrompt, systemPrompt)
-        model = "gpt-4o"
-      } else {
-        // Use task-specific model selection for OpenRouter with intelligent tier selection
-        const preferTier = taskType === "general" ? "free" : "premium" // Use free models for general tasks
-        const result = await generateWithOpenRouter(finalPrompt, taskType, systemPrompt, preferTier)
-        text = result.text
-        model = result.model
-      }
-
-      console.log(`✅ Successfully generated text using ${provider} ${model ? `(${model})` : ""}`)
-      return {
-        text,
-        usedProvider: provider,
-        fallbackUsed: !isFirstChoice,
-        model,
-        promptEnhanced,
-        enhancedPrompt,
-      }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
-      console.warn(`❌ ${provider} failed:`, errorMessage)
-
-      errors.push({ provider, error: errorMessage })
-
-      // Continue to next provider
-      continue
+    console.log(`✅ Successfully generated text using OpenAI`)
+    return {
+      text,
+      usedProvider: "openai",
+      fallbackUsed: false,
+      model: "gpt-4o",
+      promptEnhanced,
+      enhancedPrompt,
     }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error("❌ OpenAI failed:", errorMessage)
+
+    // Check if it's a configuration issue
+    if (errorMessage.includes("not configured")) {
+      throw new Error("OpenAI API key not configured. Please set up API key in the admin panel.")
+    }
+
+    throw new Error(`OpenAI generation failed: ${errorMessage}`)
   }
-
-  // If we get here, both providers failed
-  console.error("💥 All providers failed:", errors)
-
-  // Create a detailed error message
-  const errorDetails = errors.map((e) => `${e.provider}: ${e.error}`).join("; ")
-
-  // Check if it's a configuration issue
-  if (errors.every((e) => e.error.includes("not configured"))) {
-    throw new Error("No AI providers are configured. Please set up API keys in the admin panel.")
-  }
-
-  throw new Error(`All AI providers failed. ${errorDetails}`)
 }
 
 // Enhanced design-specific generation function with quality checking
@@ -827,7 +485,6 @@ export async function generateDesignWithEnhancement(
   designType: "logo" | "banner" | "poster" | "slogan" | "tagline" | "brandname",
   additionalContext?: any,
   systemPrompt?: string,
-  preferredProvider: "openai" | "openrouter" = "openrouter",
   maxRetries = 2,
 ): Promise<{
   text: string
@@ -853,98 +510,56 @@ export async function generateDesignWithEnhancement(
 
   console.log(`🎨 Design brief created: ${promptEnhanced ? "Enhanced" : "Original"} (${finalPrompt.length} chars)`)
 
-  // Map design types to task types for model selection
-  const designToTaskMap: Record<typeof designType, TaskType> = {
-    logo: "technical",
-    banner: "visual",
-    poster: "visual",
-    slogan: "creative",
-    tagline: "strategy",
-    brandname: "creative",
-  }
-
-  const taskType = designToTaskMap[designType]
   let regenerationCount = 0
 
   // Generation loop with quality checking and regeneration
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    const providers = preferredProvider === "openai" ? ["openai", "openrouter"] : ["openrouter", "openai"]
-    const errors: { provider: string; error: string }[] = []
+    try {
+      console.log(`🔄 Attempting ${designType} generation with OpenAI (attempt ${attempt + 1}/${maxRetries + 1})...`)
 
-    for (let i = 0; i < providers.length; i++) {
-      const provider = providers[i]
-      const isFirstChoice = i === 0
+      const text = await generateWithOpenAI(finalPrompt, systemPrompt)
 
-      try {
-        console.log(
-          `🔄 Attempting ${designType} generation with ${provider} (attempt ${attempt + 1}/${maxRetries + 1})...`,
-        )
+      console.log(`✅ Generated ${designType} using OpenAI`)
 
-        let text: string
-        let model: string | undefined
+      // Perform quality assessment
+      const qualityAssessment = await AIQualityChecker.assessQuality(
+        text,
+        originalPrompt,
+        designType,
+        additionalContext,
+      )
 
-        if (provider === "openai") {
-          text = await generateWithOpenAI(finalPrompt, systemPrompt)
-          model = "gpt-4o"
-        } else {
-          const result = await generateWithOpenRouter(finalPrompt, taskType, systemPrompt, "premium")
-          text = result.text
-          model = result.model
-        }
+      console.log(
+        `🔍 Quality score: ${qualityAssessment.score}/10 - ${qualityAssessment.meetsRequirements ? "PASS" : "FAIL"}`,
+      )
 
-        console.log(`✅ Generated ${designType} using ${provider} ${model ? `(${model})` : ""}`)
-
-        // Perform quality assessment
-        const qualityAssessment = await AIQualityChecker.assessQuality(
+      // If quality is acceptable or we've reached max retries, return result
+      if (!qualityAssessment.shouldRegenerate || attempt >= maxRetries) {
+        return {
           text,
-          originalPrompt,
-          designType,
-          additionalContext,
-        )
-
-        console.log(
-          `🔍 Quality score: ${qualityAssessment.score}/10 - ${qualityAssessment.meetsRequirements ? "PASS" : "FAIL"}`,
-        )
-
-        // If quality is acceptable or we've reached max retries, return result
-        if (!qualityAssessment.shouldRegenerate || attempt >= maxRetries) {
-          return {
-            text,
-            usedProvider: provider,
-            fallbackUsed: !isFirstChoice,
-            model,
-            promptEnhanced,
-            enhancedPrompt: finalPrompt,
-            qualityAssessment,
-            regenerationCount,
-          }
+          usedProvider: "openai",
+          fallbackUsed: false,
+          model: "gpt-4o",
+          promptEnhanced,
+          enhancedPrompt: finalPrompt,
+          qualityAssessment,
+          regenerationCount,
         }
-
-        // Quality check failed, try regeneration
-        console.log(`⚠️ Quality check failed (score: ${qualityAssessment.score}/10), regenerating...`)
-        regenerationCount++
-        break // Break provider loop to retry with same provider
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        console.warn(`❌ ${provider} failed for ${designType}:`, errorMessage)
-
-        errors.push({ provider, error: errorMessage })
-        continue
       }
-    }
 
-    // If all providers failed for this attempt
-    if (errors.length === providers.length) {
-      console.error(`💥 All providers failed for ${designType} attempt ${attempt + 1}:`, errors)
+      // Quality check failed, try regeneration
+      console.log(`⚠️ Quality check failed (score: ${qualityAssessment.score}/10), regenerating...`)
+      regenerationCount++
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      console.warn(`❌ OpenAI failed for ${designType}:`, errorMessage)
 
       if (attempt >= maxRetries) {
-        const errorDetails = errors.map((e) => `${e.provider}: ${e.error}`).join("; ")
-
-        if (errors.every((e) => e.error.includes("not configured"))) {
-          throw new Error("No AI providers are configured. Please set up API keys in the admin panel.")
+        if (errorMessage.includes("not configured")) {
+          throw new Error("OpenAI API key not configured. Please set up API key in the admin panel.")
         }
 
-        throw new Error(`All AI providers failed for ${designType} after ${maxRetries + 1} attempts. ${errorDetails}`)
+        throw new Error(`OpenAI generation failed for ${designType} after ${maxRetries + 1} attempts: ${errorMessage}`)
       }
     }
   }
@@ -1076,7 +691,7 @@ export async function generateImageWithFallback(
       console.log("💡 OpenAI quota exceeded, generating detailed description instead...")
 
       try {
-        // Generate a detailed visual description using the enhanced prompt
+        // Generate a detailed visual description using OpenAI
         const systemPrompt = `You are a world-class visual designer and art director with expertise in ${designType} design. Create extremely detailed visual descriptions that could be used by a designer to recreate the design perfectly.`
 
         const result = await generateDesignWithEnhancement(
@@ -1084,7 +699,6 @@ export async function generateImageWithFallback(
           designType,
           additionalContext,
           systemPrompt,
-          "openrouter",
         )
 
         const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent(`AI-Generated ${designType.charAt(0).toUpperCase() + designType.slice(1)} Design`)}`
@@ -1125,7 +739,6 @@ export async function generateImageWithFallback(
         designType,
         additionalContext,
         systemPrompt,
-        "openrouter",
       )
 
       const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent(`${designType.charAt(0).toUpperCase() + designType.slice(1)} Design Concept`)}`
@@ -1156,105 +769,38 @@ export async function generateImageWithFallback(
   }
 }
 
-// Enhanced provider availability check
+// Simplified provider availability check
 export async function checkProviderAvailability(): Promise<{
   openai: boolean
-  openrouter: boolean
   hasAnyProvider: boolean
   diagnostics: {
     openai: string
-    openrouter: string
   }
 }> {
   try {
-    const { openai_api_key, openrouter_api_key } = await getApiKeys()
+    const { openai_api_key } = await getApiKeys()
 
     const openaiAvailable = !!openai_api_key && openai_api_key.trim().length > 0
-    const openrouterAvailable = !!openrouter_api_key && openrouter_api_key.trim().length > 0
 
     const diagnostics = {
       openai: openaiAvailable ? `✅ Key configured (${openai_api_key.substring(0, 7)}...)` : "❌ No API key configured",
-      openrouter: openrouterAvailable
-        ? `✅ Key configured (${openrouter_api_key.substring(0, 7)}...)`
-        : "❌ No API key configured",
-    }
-
-    // Additional validation for OpenRouter key format
-    if (openrouterAvailable && !openrouter_api_key.startsWith("sk-or-")) {
-      diagnostics.openrouter += " ⚠️ Key format may be incorrect (should start with 'sk-or-')"
     }
 
     console.log("🔍 Provider availability check:", diagnostics)
 
     return {
       openai: openaiAvailable,
-      openrouter: openrouterAvailable,
-      hasAnyProvider: openaiAvailable || openrouterAvailable,
+      hasAnyProvider: openaiAvailable,
       diagnostics,
     }
   } catch (error) {
     console.error("❌ Error checking provider availability:", error)
     return {
       openai: false,
-      openrouter: false,
       hasAnyProvider: false,
       diagnostics: {
         openai: "❌ Error checking availability",
-        openrouter: "❌ Error checking availability",
       },
-    }
-  }
-}
-
-// Test connection to OpenRouter with enhanced model testing
-export async function testOpenRouterConnection(): Promise<{
-  success: boolean
-  error?: string
-  availableModels?: string[]
-}> {
-  try {
-    const { openrouter_api_key } = await getApiKeys()
-
-    if (!openrouter_api_key) {
-      return { success: false, error: "OpenRouter API key not configured" }
-    }
-
-    console.log("🔍 Testing OpenRouter connection...")
-
-    const client = createOpenRouterClient(openrouter_api_key)
-
-    // Test with a fast, reliable model
-    const testModels = ["anthropic/claude-3-haiku", "openai/gpt-3.5-turbo", "meta-llama/llama-3.1-8b-instruct:free"]
-    const availableModels: string[] = []
-
-    for (const model of testModels) {
-      try {
-        const response = await client.chat.completions.create({
-          model,
-          messages: [{ role: "user", content: "Hello" }],
-          max_tokens: 10,
-          temperature: 0.1,
-        })
-
-        if (response.choices[0]?.message?.content) {
-          availableModels.push(model)
-          console.log(`✅ Model ${model} is available`)
-        }
-      } catch (modelError) {
-        console.warn(`⚠️ Model ${model} not available:`, modelError)
-      }
-    }
-
-    if (availableModels.length > 0) {
-      return { success: true, availableModels }
-    } else {
-      return { success: false, error: "No models are available" }
-    }
-  } catch (error) {
-    console.error("❌ OpenRouter connection test failed:", error)
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Connection test failed",
     }
   }
 }

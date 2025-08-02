@@ -7,7 +7,6 @@ export async function POST(req: Request) {
       positioning,
       targetAudience,
       keyMessage,
-      provider = "openai",
       enhancePrompt = true,
     } = await req.json()
 
@@ -63,12 +62,9 @@ export async function POST(req: Request) {
     let enhancedPrompt: string | undefined
 
     try {
-      // Use 'strategy' task type for tagline generation with prompt enhancement
       const result = await generateWithFallback(
         basePrompt,
         systemPrompt,
-        provider as "openai" | "openrouter",
-        "strategy",
         enhancePrompt,
       )
       taglinesText = result.text
@@ -78,12 +74,12 @@ export async function POST(req: Request) {
       promptEnhanced = result.promptEnhanced
       enhancedPrompt = result.enhancedPrompt
     } catch (aiError) {
-      console.error("All AI providers failed:", aiError)
+      console.error("OpenAI generation failed:", aiError)
 
       return Response.json(
         {
           success: false,
-          error: "AI generation service temporarily unavailable. All providers failed. Please try again later.",
+          error: "OpenAI generation service temporarily unavailable. Please try again later.",
         },
         { status: 503 },
       )
@@ -105,7 +101,7 @@ export async function POST(req: Request) {
       model,
       fallbackUsed,
       promptEnhanced,
-      message: `Generated using ${usedProvider}${model ? ` (${model})` : ""} - strategic AI model${promptEnhanced ? " with enhanced prompt" : ""}`,
+      message: `Generated using ${usedProvider}${model ? ` (${model})` : ""}${promptEnhanced ? " with enhanced prompt" : ""}`,
     })
   } catch (error) {
     console.error("Tagline generation error:", error)
