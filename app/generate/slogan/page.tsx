@@ -37,7 +37,6 @@ export default function SloganGeneratorPage() {
           industry,
           tone,
           description,
-          provider: "openai", // or 'openrouter'
         }),
       })
 

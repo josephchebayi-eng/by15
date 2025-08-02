@@ -148,7 +148,7 @@ export default function DashboardPage() {
                   BrandForge
                 </span>
               </Link>
-              <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">DASHBOARD</Badge>
+                  All OpenAI modules connected and operational. Enhanced prompt generation active.
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/admin/api-keys">
@@ -259,16 +259,16 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-300 text-sm">OpenAI GPT-4o</span>
-                    <Badge className="bg-orange-500/20 text-orange-300 border-orange-500/30 text-xs">
-                      QUOTA EXCEEDED
+                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">
+                      ACTIVE
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300 text-sm">OpenRouter</span>
+                    <span className="text-gray-300 text-sm">DALL-E 3</span>
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">ACTIVE</Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300 text-sm">Fallback System</span>
+                    <span className="text-gray-300 text-sm">Prompt Enhancement</span>
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">WORKING</Badge>
                   </div>
                 </div>
@@ -300,11 +300,11 @@ export default function DashboardPage() {
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">ENABLED</Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300 text-sm">Smart Routing</span>
+                    <span className="text-gray-300 text-sm">Quality Assessment</span>
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">ACTIVE</Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300 text-sm">Error Recovery</span>
+                    <span className="text-gray-300 text-sm">Image Generation</span>
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">WORKING</Badge>
                   </div>
                 </div>

@@ -11,17 +11,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface ApiKeyStatus {
   openai_configured: boolean
-  openrouter_configured: boolean
 }
 
 export default function ApiKeysPage() {
   const [openaiKey, setOpenaiKey] = useState("")
-  const [openrouterKey, setOpenrouterKey] = useState("")
   const [showOpenaiKey, setShowOpenaiKey] = useState(false)
-  const [showOpenrouterKey, setShowOpenrouterKey] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
-  const [keyStatus, setKeyStatus] = useState<ApiKeyStatus>({ openai_configured: false, openrouter_configured: false })
+  const [keyStatus, setKeyStatus] = useState<ApiKeyStatus>({ openai_configured: false })
 
   useEffect(() => {
     checkKeyStatus()
@@ -69,8 +66,6 @@ export default function ApiKeysPage() {
         // Clear the input field for security
         if (keyName === "openai_api_key") {
           setOpenaiKey("")
-        } else {
-          setOpenrouterKey("")
         }
       } else {
         setMessage({ type: "error", text: data.error || "Failed to save API key" })
@@ -221,89 +216,6 @@ export default function ApiKeysPage() {
             </CardContent>
           </Card>
 
-          {/* OpenRouter API Key */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-teal-500/40">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center text-white">
-                    <Key className="w-5 h-5 mr-2 text-teal-400" />
-                    OpenRouter API Key
-                  </CardTitle>
-                  <CardDescription className="text-gray-400 font-mono">
-                    Access to Claude 3.5 Sonnet and other advanced models
-                  </CardDescription>
-                </div>
-                <Badge
-                  className={`font-mono ${
-                    keyStatus.openrouter_configured
-                      ? "bg-green-500/20 text-green-300 border-green-500/30"
-                      : "bg-red-500/20 text-red-300 border-red-500/30"
-                  }`}
-                >
-                  {keyStatus.openrouter_configured ? (
-                    <>
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      CONFIGURED
-                    </>
-                  ) : (
-                    <>
-                      <XCircle className="w-3 h-3 mr-1" />
-                      NOT SET
-                    </>
-                  )}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="openrouter-key" className="text-gray-300 font-mono">
-                  API KEY
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="openrouter-key"
-                    type={showOpenrouterKey ? "text" : "password"}
-                    placeholder="sk-or-..."
-                    value={openrouterKey}
-                    onChange={(e) => setOpenrouterKey(e.target.value)}
-                    className="bg-gray-900/80 border-teal-500/40 text-gray-200 placeholder-gray-400 pr-20"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-12 top-0 h-full px-3 text-gray-400 hover:text-teal-400"
-                    onClick={() => setShowOpenrouterKey(!showOpenrouterKey)}
-                  >
-                    {showOpenrouterKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 text-teal-400 hover:text-teal-300"
-                    onClick={() => handleSaveKey("openrouter_api_key", openrouterKey)}
-                    disabled={isLoading || !openrouterKey.trim()}
-                  >
-                    <Save className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="text-xs text-gray-500 font-mono">
-                Get your API key from{" "}
-                <a
-                  href="https://openrouter.ai/keys"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-teal-400 hover:text-teal-300"
-                >
-                  openrouter.ai/keys
-                </a>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* System Status */}
           <Card className="bg-black/80 backdrop-blur-xl border border-purple-500/40">
             <CardHeader>
@@ -317,12 +229,12 @@ export default function ApiKeysPage() {
                     <span className="text-gray-300 font-mono text-sm">LOGO GENERATION</span>
                     <Badge
                       className={`text-xs font-mono ${
-                        keyStatus.openai_configured || keyStatus.openrouter_configured
+                        keyStatus.openai_configured
                           ? "bg-green-500/20 text-green-300 border-green-500/30"
                           : "bg-red-500/20 text-red-300 border-red-500/30"
                       }`}
                     >
-                      {keyStatus.openai_configured || keyStatus.openrouter_configured ? "ACTIVE" : "OFFLINE"}
+                      {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
@@ -343,24 +255,24 @@ export default function ApiKeysPage() {
                     <span className="text-gray-300 font-mono text-sm">TEXT GENERATION</span>
                     <Badge
                       className={`text-xs font-mono ${
-                        keyStatus.openai_configured || keyStatus.openrouter_configured
+                        keyStatus.openai_configured
                           ? "bg-green-500/20 text-green-300 border-green-500/30"
                           : "bg-red-500/20 text-red-300 border-red-500/30"
                       }`}
                     >
-                      {keyStatus.openai_configured || keyStatus.openrouter_configured ? "ACTIVE" : "OFFLINE"}
+                      {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300 font-mono text-sm">ADVANCED MODELS</span>
+                    <span className="text-gray-300 font-mono text-sm">PROMPT ENHANCEMENT</span>
                     <Badge
                       className={`text-xs font-mono ${
-                        keyStatus.openrouter_configured
+                        keyStatus.openai_configured
                           ? "bg-green-500/20 text-green-300 border-green-500/30"
                           : "bg-red-500/20 text-red-300 border-red-500/30"
                       }`}
                     >
-                      {keyStatus.openrouter_configured ? "ACTIVE" : "OFFLINE"}
+                      {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                 </div>
@@ -379,7 +291,7 @@ export default function ApiKeysPage() {
               <p>• API keys are stored securely in Supabase with Row Level Security (RLS)</p>
               <p>• Only service role has access to the secrets table</p>
               <p>• Keys are never exposed to client-side code</p>
-              <p>• All API calls are made server-side for maximum security</p>
+              <p>• All OpenAI API calls are made server-side for maximum security</p>
               <p>• Consider rotating your API keys regularly for best security practices</p>
             </div>
           </CardContent>

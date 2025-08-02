@@ -37,7 +37,6 @@ export default function TaglineGeneratorPage() {
           positioning,
           targetAudience,
           keyMessage,
-          provider: "openai",
         }),
       })
 

@@ -42,7 +42,6 @@ export default function BrandNameGeneratorPage() {
           style,
           keywords,
           description,
-          provider: "openai",
         }),
       })
 

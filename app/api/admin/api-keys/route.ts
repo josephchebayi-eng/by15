@@ -35,7 +35,6 @@ export async function GET() {
       success: true,
       keys: {
         openai_configured: !!keys.openai_api_key,
-        openrouter_configured: !!keys.openrouter_api_key,
       },
     })
   } catch (error) {
