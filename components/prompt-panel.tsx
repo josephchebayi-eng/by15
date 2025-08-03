@@ -219,10 +219,10 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
 
           {/* Generate Button */}
           <div className="pt-4">
-            <Button 
+            <Button
               onClick={handleGenerate}
               disabled={!prompt.trim() || isGenerating}
-              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/25 py-3 font-medium"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 py-3 font-medium"
             >
               {isGenerating ? (
                 <div className="flex items-center space-x-2">
