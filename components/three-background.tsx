@@ -125,7 +125,22 @@ function FloatingGlassShards() {
   )
 }
 
+// Check if WebGL is supported
+function isWebGLSupported() {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && canvas.getContext('webgl'))
+  } catch (e) {
+    return false
+  }
+}
+
 export default function ThreeBackground() {
+  // Don't render if WebGL is not supported
+  if (typeof window !== 'undefined' && !isWebGLSupported()) {
+    return <div className="absolute inset-0 bg-transparent" />
+  }
+
   return (
     <div className="absolute inset-0 z-0">
       <ErrorBoundary fallback={<div className="absolute inset-0 bg-transparent" />}>
