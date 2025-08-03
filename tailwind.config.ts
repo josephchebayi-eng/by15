@@ -138,6 +138,8 @@ const config = {
         glow: "0 0 20px rgba(16, 185, 129, 0.4)",
         "glow-lg": "0 0 30px rgba(16, 185, 129, 0.5)",
         "inner-glow": "inset 0 0 20px rgba(16, 185, 129, 0.2)",
+        "glass-lime": "0 8px 32px rgba(132, 204, 22, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+        "glass-lime-hover": "0 12px 40px rgba(132, 204, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
       },
     },
   },
