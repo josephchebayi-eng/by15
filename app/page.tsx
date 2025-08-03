@@ -298,17 +298,17 @@ export default function HomePage() {
             {/* Brand */}
             <div>
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">
                   BrandForge
                 </span>
               </div>
-              <p className="text-gray-400 font-mono text-sm leading-relaxed">
-                AI-Powered Design Suite v3.0
+              <p className="text-slate-400 text-sm leading-relaxed font-light">
+                Enterprise Brand Design Platform
                 <br />
-                Creating the future of branding.
+                Trusted by industry leaders worldwide.
               </p>
             </div>
 
