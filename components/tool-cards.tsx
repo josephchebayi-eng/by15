@@ -212,17 +212,17 @@ export default function ToolCards() {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center space-x-6 bg-black/80 backdrop-blur-xl border border-emerald-500/40 rounded-2xl px-8 py-6 shadow-xl">
+          <div className="inline-flex items-center space-x-6 bg-black/80 backdrop-blur-xl border border-blue-500/40 rounded-2xl px-8 py-6 shadow-xl">
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
               <span className="text-gray-300 font-mono text-sm">ALL TOOLS ACTIVE</span>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-teal-400 rounded-full animate-pulse delay-200"></div>
+              <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse delay-200"></div>
               <span className="text-gray-300 font-mono text-sm">INSTANT GENERATION</span>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse delay-400"></div>
+              <div className="w-3 h-3 bg-pink-400 rounded-full animate-pulse delay-400"></div>
               <span className="text-gray-300 font-mono text-sm">UNLIMITED USAGE</span>
             </div>
           </div>
