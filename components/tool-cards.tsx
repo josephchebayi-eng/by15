@@ -119,7 +119,7 @@ export default function ToolCards() {
             AI-POWERED TOOLS
           </Badge>
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
               Create Stunning Branding
             </span>
             <br />
