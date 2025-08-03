@@ -114,20 +114,20 @@ export default function ToolCards() {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 px-4 py-2 mb-6">
+          <Badge className="bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 text-emerald-400 px-6 py-3 mb-8 font-medium">
             <Wand2 className="w-4 h-4 mr-2" />
-            AI-POWERED TOOLS
+            ENTERPRISE DESIGN SUITE
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
-              Create Stunning Branding
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-8">
+            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-300 bg-clip-text text-transparent">
+              Professional Brand Assets
             </span>
             <br />
-            <span className="text-gray-200 text-3xl md:text-5xl">Powered by AI</span>
+            <span className="text-slate-400 text-3xl md:text-5xl font-light">at Enterprise Scale</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Transform simple ideas into professional brand assets in seconds. Our AI-powered tools understand design principles, 
-            brand strategy, and market trends to deliver exceptional results.
+          <p className="text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed font-light">
+            Streamline your brand operations with AI-powered design automation. Maintain consistency,
+            reduce costs, and accelerate time-to-market across all brand touchpoints.
           </p>
         </div>
 
