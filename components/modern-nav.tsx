@@ -58,16 +58,16 @@ export default function ModernNav() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:shadow-emerald-500/40 transition-all duration-300 group-hover:scale-105">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105">
                 <Palette className="w-6 h-6 text-white" />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-400 rounded-xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-300"></div>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent">
               BrandForge
             </span>
-            <div className="px-2 py-1 bg-emerald-500/20 rounded-md">
-              <span className="text-xs font-mono text-emerald-300">AI</span>
+            <div className="px-2 py-1 bg-blue-500/20 rounded-md">
+              <span className="text-xs font-mono text-blue-300">AI</span>
             </div>
           </Link>
 
