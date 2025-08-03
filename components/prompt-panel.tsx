@@ -45,12 +45,13 @@ const styles = [
 ]
 
 const tools = [
-  { id: 'logo', name: 'Logo', icon: Palette, color: 'emerald' },
-  { id: 'banner', name: 'Banner', icon: Target, color: 'teal' },
-  { id: 'poster', name: 'Poster', icon: TrendingUp, color: 'green' },
-  { id: 'slogan', name: 'Slogan', icon: MessageSquare, color: 'purple' },
-  { id: 'tagline', name: 'Tagline', icon: Type, color: 'orange' },
-  { id: 'brandname', name: 'Brand Name', icon: Hash, color: 'pink' }
+  { id: 'logo', name: 'Logo', icon: Palette, color: 'blue' },
+  { id: 'banner', name: 'Banner', icon: Target, color: 'indigo' },
+  { id: 'poster', name: 'Poster', icon: TrendingUp, color: 'purple' },
+  { id: 'businesscard', name: 'Business Card', icon: CreditCard, color: 'pink' },
+  { id: 'slogan', name: 'Slogan', icon: MessageSquare, color: 'cyan' },
+  { id: 'tagline', name: 'Tagline', icon: Type, color: 'violet' },
+  { id: 'brandname', name: 'Brand Name', icon: Hash, color: 'fuchsia' }
 ]
 
 interface PromptPanelProps {
