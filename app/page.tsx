@@ -236,28 +236,28 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-purple-900/50 to-pink-900/50"></div>
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent">
-              Ready to Transform
+      <section className="py-24 px-4 sm:px-6 lg:px-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-800/60 to-slate-900/60"></div>
+        <div className="relative max-w-5xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-8">
+            <span className="bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">
+              Scale Your Brand
             </span>
             <br />
-            <span className="text-gray-200 text-3xl md:text-5xl">Your Brand?</span>
+            <span className="bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent text-3xl md:text-5xl">with Enterprise AI</span>
           </h2>
-          <p className="text-xl text-gray-300 mb-12 leading-relaxed">
-            Join thousands of businesses using AI to create stunning brand assets.
-            Start your creative journey today.
+          <p className="text-xl text-slate-300 mb-16 leading-relaxed max-w-3xl mx-auto font-light">
+            Join industry leaders who trust our platform to maintain brand excellence.
+            Enterprise-grade security, compliance, and support included.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-10 py-4 h-auto shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 group"
+                className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-lg px-12 py-4 h-auto shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 group font-medium"
               >
                 <Database className="mr-3 w-5 h-5" />
-                Access Dashboard
+                Start Free Trial
                 <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -266,11 +266,27 @@ export default function HomePage() {
               size="lg"
               variant="outline"
               onClick={() => setIsPromptPanelOpen(true)}
-              className="border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/10 text-lg px-10 py-4 h-auto backdrop-blur-sm transition-all duration-300 group"
+              className="border-2 border-slate-600/50 text-slate-300 hover:bg-slate-800/50 hover:border-emerald-500/50 hover:text-emerald-400 text-lg px-12 py-4 h-auto backdrop-blur-sm transition-all duration-300 group font-medium"
             >
               <Wand2 className="mr-3 w-5 h-5 group-hover:rotate-12 transition-transform" />
-              Try AI Now
+              Book Demo
             </Button>
+          </div>
+
+          {/* Enterprise features */}
+          <div className="mt-16 grid md:grid-cols-3 gap-8 text-left">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-emerald-400 mb-2">Enterprise Security</div>
+              <div className="text-slate-400 text-sm">SOC 2 Type II, GDPR compliant</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-slate-200 mb-2">24/7 Support</div>
+              <div className="text-slate-400 text-sm">Dedicated customer success team</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-emerald-400 mb-2">99.9% SLA</div>
+              <div className="text-slate-400 text-sm">Enterprise-grade reliability</div>
+            </div>
           </div>
         </div>
       </section>
