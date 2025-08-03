@@ -149,8 +149,8 @@ export default function ToolCards() {
                   isHovered ? 'opacity-100 blur-2xl' : 'opacity-0'
                 }`}></div>
 
-                <Card className={`relative bg-black/80 backdrop-blur-xl border-${tool.color}-500/40 shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden ${
-                  isHovered ? `shadow-${tool.color}-500/20 scale-105` : ''
+                <Card className={`relative bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime transition-all duration-500 rounded-3xl overflow-hidden ${
+                  isHovered ? 'shadow-glass-lime-hover scale-105 border-lime-400/50' : ''
                 }`}>
                   {/* Background Pattern */}
                   <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/10 via-transparent to-transparent`}></div>
