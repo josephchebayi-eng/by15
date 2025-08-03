@@ -132,16 +132,20 @@ function FloatingGlassShards() {
 export default function ThreeBackground() {
   return (
     <div className="absolute inset-0 z-0">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        style={{ background: 'transparent' }}
-      >
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[10, 10, 5]} intensity={0.5} color="#ffffff" />
-        <pointLight position={[-10, -10, -5]} intensity={0.3} color="#8b5cf6" />
-        <GlassyFluid />
-        <FloatingGlassShards />
-      </Canvas>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 75 }}
+          style={{ background: 'transparent' }}
+          gl={{ antialias: true, alpha: true }}
+          onError={(error) => console.warn('Three.js Canvas Error:', error)}
+        >
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[10, 10, 5]} intensity={0.5} color="#ffffff" />
+          <pointLight position={[-10, -10, -5]} intensity={0.3} color="#8b5cf6" />
+          <GlassyFluid />
+          <FloatingGlassShards />
+        </Canvas>
+      </ErrorBoundary>
     </div>
   )
 }
