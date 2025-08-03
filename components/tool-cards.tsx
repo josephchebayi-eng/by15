@@ -212,18 +212,18 @@ export default function ToolCards() {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center space-x-6 bg-black/80 backdrop-blur-xl border border-blue-500/40 rounded-2xl px-8 py-6 shadow-xl">
+          <div className="inline-flex items-center space-x-8 bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl px-8 py-6 shadow-xl">
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-              <span className="text-gray-300 font-mono text-sm">ALL TOOLS ACTIVE</span>
+              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-slate-300 font-medium text-sm uppercase tracking-wider">System Operational</span>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse delay-200"></div>
-              <span className="text-gray-300 font-mono text-sm">INSTANT GENERATION</span>
+              <div className="w-3 h-3 bg-slate-400 rounded-full animate-pulse delay-200"></div>
+              <span className="text-slate-300 font-medium text-sm uppercase tracking-wider">Enterprise Ready</span>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-pink-400 rounded-full animate-pulse delay-400"></div>
-              <span className="text-gray-300 font-mono text-sm">UNLIMITED USAGE</span>
+              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse delay-400"></div>
+              <span className="text-slate-300 font-medium text-sm uppercase tracking-wider">SOC 2 Compliant</span>
             </div>
           </div>
         </div>
