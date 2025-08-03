@@ -366,7 +366,7 @@ export default function HomePage() {
       {!isPromptPanelOpen && (
         <Button
           onClick={() => setIsPromptPanelOpen(true)}
-          className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 z-40 group"
+          className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 z-40 group"
         >
           <Wand2 className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
         </Button>
