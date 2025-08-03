@@ -78,10 +78,10 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
 
   return (
     <div className="fixed inset-y-0 right-0 w-96 z-50 transform transition-transform duration-300">
-      <Card className="h-full bg-black/95 backdrop-blur-xl border-l border-emerald-500/30 shadow-2xl rounded-none">
-        <CardHeader className="border-b border-emerald-500/20">
+      <Card className="h-full bg-black/95 backdrop-blur-xl border-l border-blue-500/30 shadow-2xl rounded-none">
+        <CardHeader className="border-b border-blue-500/20">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-emerald-400 font-mono">AI PROMPT STUDIO</CardTitle>
+            <CardTitle className="text-blue-400 font-mono">AI PROMPT STUDIO</CardTitle>
             <Button 
               variant="ghost" 
               size="sm" 
