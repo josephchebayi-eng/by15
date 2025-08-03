@@ -348,9 +348,9 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-blue-500/20 pt-8 text-center">
-            <p className="text-gray-400 text-sm">
-              &copy; 2024 BrandForge AI. All rights reserved. Designed with ❤️ for creators.
+          <div className="border-t border-slate-800/50 pt-8 text-center">
+            <p className="text-slate-400 text-sm">
+              &copy; 2024 BrandForge Enterprise. All rights reserved. SOC 2 Type II Certified.
             </p>
           </div>
         </div>
