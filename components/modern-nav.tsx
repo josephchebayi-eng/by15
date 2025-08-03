@@ -155,16 +155,16 @@ export default function ModernNav() {
               variant="ghost"
               size="sm"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="text-gray-300 hover:text-blue-400 transition-colors"
+              className="text-slate-300 hover:text-emerald-400 transition-colors"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
 
             {/* CTA Button */}
             <Link href="/dashboard">
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300">
+              <Button className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300 font-medium">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Start Creating
+                Get Started
               </Button>
             </Link>
 
