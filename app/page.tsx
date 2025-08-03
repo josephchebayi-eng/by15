@@ -268,7 +268,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black/90 backdrop-blur-xl border-t border-emerald-500/30 text-white py-16 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-black/90 backdrop-blur-xl border-t border-blue-500/30 text-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             {/* Brand */}
