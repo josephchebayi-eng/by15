@@ -3,19 +3,20 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
-import { 
-  Palette, 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
+import {
+  Palette,
+  Menu,
+  X,
+  Sun,
+  Moon,
   Sparkles,
   ChevronDown,
   Target,
   TrendingUp,
   MessageSquare,
   Type,
-  Hash
+  Hash,
+  CreditCard
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
