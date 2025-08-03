@@ -83,9 +83,9 @@ export default function ModernNav() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="bg-black/90 backdrop-blur-xl border-blue-500/40 min-w-[220px]"
+                className="bg-slate-900/95 backdrop-blur-xl border-slate-700/50 min-w-[220px]"
               >
-                <DropdownMenuLabel className="text-blue-300 font-mono text-xs">
+                <DropdownMenuLabel className="text-emerald-400 font-medium text-xs">
                   VISUAL GENERATION
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
