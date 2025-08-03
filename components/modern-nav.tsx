@@ -83,50 +83,56 @@ export default function ModernNav() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="bg-black/90 backdrop-blur-xl border-emerald-500/40 min-w-[220px]"
+                className="bg-black/90 backdrop-blur-xl border-blue-500/40 min-w-[220px]"
               >
-                <DropdownMenuLabel className="text-emerald-300 font-mono text-xs">
+                <DropdownMenuLabel className="text-blue-300 font-mono text-xs">
                   VISUAL GENERATION
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/logo" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <Palette className="w-4 h-4 mr-3 text-emerald-400" />
+                  <Link href="/generate/logo" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <Palette className="w-4 h-4 mr-3 text-blue-400" />
                     Logo Generator
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/banner" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <Target className="w-4 h-4 mr-3 text-teal-400" />
+                  <Link href="/generate/banner" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <Target className="w-4 h-4 mr-3 text-indigo-400" />
                     Banner Creator
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/poster" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <TrendingUp className="w-4 h-4 mr-3 text-green-400" />
+                  <Link href="/generate/poster" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <TrendingUp className="w-4 h-4 mr-3 text-purple-400" />
                     Poster Designer
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/generate/businesscard" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <CreditCard className="w-4 h-4 mr-3 text-pink-400" />
+                    Business Card Designer
+                  </Link>
+                </DropdownMenuItem>
 
-                <DropdownMenuSeparator className="bg-emerald-500/20" />
+                <DropdownMenuSeparator className="bg-blue-500/20" />
 
-                <DropdownMenuLabel className="text-emerald-300 font-mono text-xs">
+                <DropdownMenuLabel className="text-blue-300 font-mono text-xs">
                   TEXT GENERATION
                 </DropdownMenuLabel>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/slogan" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <MessageSquare className="w-4 h-4 mr-3 text-purple-400" />
+                  <Link href="/generate/slogan" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <MessageSquare className="w-4 h-4 mr-3 text-cyan-400" />
                     Slogan Wizard
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/tagline" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <Type className="w-4 h-4 mr-3 text-orange-400" />
+                  <Link href="/generate/tagline" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <Type className="w-4 h-4 mr-3 text-violet-400" />
                     Tagline Maker
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/generate/brandname" className="text-gray-300 hover:text-emerald-300 cursor-pointer">
-                    <Hash className="w-4 h-4 mr-3 text-pink-400" />
+                  <Link href="/generate/brandname" className="text-gray-300 hover:text-blue-300 cursor-pointer">
+                    <Hash className="w-4 h-4 mr-3 text-fuchsia-400" />
                     Brand Namer
                   </Link>
                 </DropdownMenuItem>
