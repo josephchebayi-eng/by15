@@ -144,8 +144,8 @@ export default function HomePage() {
 
           {/* Stats Cards */}
           <div className="relative animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-slate-600/10 rounded-2xl blur-2xl"></div>
-            <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-lime-500/15 to-lime-600/10 rounded-2xl blur-2xl"></div>
+            <div className="relative bg-lime-glass-300 backdrop-blur-xl border border-lime-500/30 rounded-2xl p-8 shadow-glass-lime">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
                 <div className="group">
                   <div className="text-4xl font-bold text-emerald-400 mb-3 group-hover:scale-105 transition-transform">99.9%</div>
