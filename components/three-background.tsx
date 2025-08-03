@@ -128,7 +128,7 @@ function FloatingGlassShards() {
 export default function ThreeBackground() {
   return (
     <div className="absolute inset-0 z-0">
-      <ErrorBoundary fallback={<ErrorFallback />}>
+      <ErrorBoundary fallback={<div className="absolute inset-0 bg-transparent" />}>
         <Canvas
           camera={{ position: [0, 0, 5], fov: 75 }}
           style={{ background: 'transparent' }}
