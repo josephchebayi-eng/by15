@@ -156,9 +156,9 @@ export default function ToolCards() {
                   <div className="absolute inset-0 bg-gradient-to-br from-lime-500/10 via-lime-400/5 to-transparent"></div>
                   
                   {/* Decorative Corner */}
-                  <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <div className="absolute top-0 right-0 w-32 h-32 opacity-15">
                     <div
-                      className={`w-full h-full bg-gradient-to-br from-${tool.color}-400 to-transparent`}
+                      className="w-full h-full bg-gradient-to-br from-lime-400/40 to-transparent"
                       style={{
                         clipPath: "polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%)",
                       }}
