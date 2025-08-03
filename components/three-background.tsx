@@ -1,9 +1,14 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, ErrorBoundary } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
+
+// Error Fallback Component
+function ErrorFallback() {
+  return <div className="absolute inset-0 bg-transparent" />
+}
 
 function GlassyFluid() {
   const mesh1 = useRef<THREE.Mesh>(null!)
