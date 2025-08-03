@@ -290,34 +290,35 @@ export default function HomePage() {
 
             {/* Tools */}
             <div>
-              <h3 className="font-semibold mb-6 text-emerald-400 text-lg">AI Tools</h3>
+              <h3 className="font-semibold mb-6 text-blue-400 text-lg">AI Tools</h3>
               <ul className="space-y-3 text-gray-400 text-sm">
-                <li><Link href="/generate/logo" className="hover:text-emerald-400 transition-colors">Logo Generator</Link></li>
-                <li><Link href="/generate/banner" className="hover:text-emerald-400 transition-colors">Banner Creator</Link></li>
-                <li><Link href="/generate/poster" className="hover:text-emerald-400 transition-colors">Poster Designer</Link></li>
-                <li><Link href="/generate/slogan" className="hover:text-emerald-400 transition-colors">Slogan Wizard</Link></li>
+                <li><Link href="/generate/logo" className="hover:text-blue-400 transition-colors">Logo Generator</Link></li>
+                <li><Link href="/generate/banner" className="hover:text-blue-400 transition-colors">Banner Creator</Link></li>
+                <li><Link href="/generate/poster" className="hover:text-blue-400 transition-colors">Poster Designer</Link></li>
+                <li><Link href="/generate/businesscard" className="hover:text-blue-400 transition-colors">Business Card Designer</Link></li>
+                <li><Link href="/generate/slogan" className="hover:text-blue-400 transition-colors">Slogan Wizard</Link></li>
               </ul>
             </div>
 
             {/* Resources */}
             <div>
-              <h3 className="font-semibold mb-6 text-emerald-400 text-lg">Resources</h3>
+              <h3 className="font-semibold mb-6 text-blue-400 text-lg">Resources</h3>
               <ul className="space-y-3 text-gray-400 text-sm">
-                <li><Link href="/dashboard" className="hover:text-emerald-400 transition-colors">Dashboard</Link></li>
-                <li><Link href="#showcase" className="hover:text-emerald-400 transition-colors">Examples</Link></li>
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">Documentation</Link></li>
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">Support</Link></li>
+                <li><Link href="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link></li>
+                <li><Link href="#showcase" className="hover:text-blue-400 transition-colors">Examples</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">Documentation</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">Support</Link></li>
               </ul>
             </div>
 
             {/* Company */}
             <div>
-              <h3 className="font-semibold mb-6 text-emerald-400 text-lg">Company</h3>
+              <h3 className="font-semibold mb-6 text-blue-400 text-lg">Company</h3>
               <ul className="space-y-3 text-gray-400 text-sm">
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">About</Link></li>
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">Careers</Link></li>
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">Privacy</Link></li>
-                <li><Link href="#" className="hover:text-emerald-400 transition-colors">Terms</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">About</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">Careers</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">Privacy</Link></li>
+                <li><Link href="#" className="hover:text-blue-400 transition-colors">Terms</Link></li>
               </ul>
             </div>
           </div>
