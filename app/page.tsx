@@ -84,7 +84,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           {/* Badge */}
           <div className="flex justify-center mb-8 animate-fade-in">
-            <Badge className="bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30 text-emerald-300 px-6 py-3 text-sm">
+            <Badge className="bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 px-6 py-3 text-sm">
               <Cpu className="w-4 h-4 mr-2" />
               AI-POWERED DESIGN SUITE v3.0
             </Badge>
@@ -92,7 +92,7 @@ export default function HomePage() {
 
           {/* Main Headline */}
           <h1 className="text-5xl md:text-8xl font-bold text-white mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-green-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
               Create Stunning
             </span>
             <br />
