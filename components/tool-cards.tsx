@@ -114,7 +114,7 @@ export default function ToolCards() {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge className="bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30 text-emerald-300 px-4 py-2 mb-6">
+          <Badge className="bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 px-4 py-2 mb-6">
             <Wand2 className="w-4 h-4 mr-2" />
             AI-POWERED TOOLS
           </Badge>
