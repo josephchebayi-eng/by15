@@ -139,11 +139,11 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
 
           {/* Model Selection */}
           <div className="space-y-3">
-            <Label className="text-emerald-300 font-mono text-xs uppercase tracking-wider">
+            <Label className="text-blue-300 font-mono text-xs uppercase tracking-wider">
               AI Model
             </Label>
             <Select value={selectedModel} onValueChange={setSelectedModel}>
-              <SelectTrigger className="bg-black/50 border-gray-700 focus:border-emerald-500 text-white">
+              <SelectTrigger className="bg-black/50 border-gray-700 focus:border-blue-500 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-black/90 backdrop-blur-xl border-gray-700">
