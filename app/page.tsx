@@ -324,7 +324,7 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-emerald-500/20 pt-8 text-center">
+          <div className="border-t border-blue-500/20 pt-8 text-center">
             <p className="text-gray-400 text-sm">
               &copy; 2024 BrandForge AI. All rights reserved. Designed with ❤️ for creators.
             </p>
@@ -333,16 +333,16 @@ export default function HomePage() {
       </footer>
 
       {/* Prompt Panel */}
-      <PromptPanel 
-        isOpen={isPromptPanelOpen} 
-        onClose={() => setIsPromptPanelOpen(false)} 
+      <PromptPanel
+        isOpen={isPromptPanelOpen}
+        onClose={() => setIsPromptPanelOpen(false)}
       />
 
       {/* Floating Action Button */}
       {!isPromptPanelOpen && (
         <Button
           onClick={() => setIsPromptPanelOpen(true)}
-          className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 z-40 group"
+          className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 z-40 group"
         >
           <Wand2 className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
         </Button>
