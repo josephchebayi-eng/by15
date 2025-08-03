@@ -93,30 +93,28 @@ export default function HomePage() {
         
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           {/* Badge */}
-          <div className="flex justify-center mb-8 animate-fade-in">
-            <Badge className="bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 text-blue-300 px-6 py-3 text-sm">
+          <div className="flex justify-center mb-12 animate-fade-in">
+            <Badge className="bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 text-emerald-400 px-8 py-3 text-sm font-medium">
               <Cpu className="w-4 h-4 mr-2" />
-              AI-POWERED DESIGN SUITE v3.0
+              ENTERPRISE AI PLATFORM
             </Badge>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-5xl md:text-8xl font-bold text-white mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
-              Create Stunning
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-10 leading-tight animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-300 bg-clip-text text-transparent">
+              Professional Brand
             </span>
             <br />
-            <span className="bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-400 bg-clip-text text-transparent">
-              Logos, Posters & Banners
+            <span className="bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent">
+              Design Automation
             </span>
-            <br />
-            <span className="text-gray-200 text-4xl md:text-6xl">Powered by AI</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            Turn simple ideas into professional brand assets in seconds. Our AI understands design principles, 
-            brand strategy, and market trends to deliver exceptional results every time.
+          <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in font-light" style={{ animationDelay: '0.4s' }}>
+            Transform your brand identity with enterprise-grade AI. Create consistent, professional assets
+            that scale with your business and maintain brand excellence across all touchpoints.
           </p>
 
           {/* CTA Buttons */}
