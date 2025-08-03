@@ -284,7 +284,7 @@ export default function DiagnosticsPage() {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
                   {Object.entries(diagnostics.moduleTests).map(([moduleName, result]) => (
-                    <Card key={moduleName} className="bg-gray-900/60 border border-gray-700">
+                    <Card key={moduleName} className="bg-lime-glass-100 border border-lime-500/20 shadow-glass-lime">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center">
