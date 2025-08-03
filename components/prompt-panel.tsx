@@ -125,7 +125,7 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
 
           {/* Prompt Input */}
           <div className="space-y-3">
-            <Label htmlFor="prompt" className="text-emerald-300 font-mono text-xs uppercase tracking-wider">
+            <Label htmlFor="prompt" className="text-blue-300 font-mono text-xs uppercase tracking-wider">
               Describe Your Vision
             </Label>
             <Textarea
@@ -133,7 +133,7 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
               placeholder="A modern, minimalist logo for a tech startup with clean typography and geometric shapes..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="min-h-[100px] bg-black/50 border-gray-700 focus:border-emerald-500 text-white resize-none"
+              className="min-h-[100px] bg-black/50 border-gray-700 focus:border-blue-500 text-white resize-none"
             />
           </div>
 
