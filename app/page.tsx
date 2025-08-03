@@ -87,7 +87,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
         {/* Hero 3D Background */}
-        <HeroBackground />
+        <Suspense fallback={<div className="absolute inset-0 bg-transparent" />}>
+          <HeroBackground />
+        </Suspense>
         
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           {/* Badge */}
