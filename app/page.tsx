@@ -25,8 +25,14 @@ import ImageShowcase from '@/components/image-showcase'
 import PromptPanel from '@/components/prompt-panel'
 
 // Dynamically import 3D components to avoid SSR issues
-const ThreeBackground = dynamic(() => import('@/components/three-background'), { ssr: false })
-const HeroBackground = dynamic(() => import('@/components/hero-background'), { ssr: false })
+const ThreeBackground = dynamic(() => import('@/components/three-background'), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-transparent" />
+})
+const HeroBackground = dynamic(() => import('@/components/hero-background'), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-transparent" />
+})
 
 export default function HomePage() {
   const [isPromptPanelOpen, setIsPromptPanelOpen] = useState(false)
