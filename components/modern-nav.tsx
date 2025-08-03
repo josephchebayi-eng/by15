@@ -139,11 +139,11 @@ export default function ModernNav() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/dashboard" className="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">
+            <Link href="/dashboard" className="text-gray-300 hover:text-blue-400 transition-colors text-sm font-medium">
               Dashboard
             </Link>
 
-            <Link href="#showcase" className="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">
+            <Link href="#showcase" className="text-gray-300 hover:text-blue-400 transition-colors text-sm font-medium">
               Examples
             </Link>
           </div>
