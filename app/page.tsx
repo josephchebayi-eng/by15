@@ -136,23 +136,23 @@ export default function HomePage() {
 
           {/* Stats Cards */}
           <div className="relative animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-3xl blur-3xl"></div>
-            <div className="relative bg-black/40 backdrop-blur-xl border border-emerald-500/30 rounded-3xl p-8 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-3xl"></div>
+            <div className="relative bg-black/40 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-8 shadow-2xl">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
                 <div className="group">
-                  <div className="text-4xl font-bold text-emerald-400 mb-2 group-hover:scale-110 transition-transform">99.9%</div>
+                  <div className="text-4xl font-bold text-blue-400 mb-2 group-hover:scale-110 transition-transform">99.9%</div>
                   <div className="text-gray-400 text-sm font-mono">System Uptime</div>
                 </div>
                 <div className="group">
-                  <div className="text-4xl font-bold text-teal-400 mb-2 group-hover:scale-110 transition-transform">2.3s</div>
+                  <div className="text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform">2.3s</div>
                   <div className="text-gray-400 text-sm font-mono">Avg Generation</div>
                 </div>
                 <div className="group">
-                  <div className="text-4xl font-bold text-green-400 mb-2 group-hover:scale-110 transition-transform">50K+</div>
+                  <div className="text-4xl font-bold text-pink-400 mb-2 group-hover:scale-110 transition-transform">50K+</div>
                   <div className="text-gray-400 text-sm font-mono">Assets Created</div>
                 </div>
                 <div className="group">
-                  <div className="text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform">∞</div>
+                  <div className="text-4xl font-bold text-indigo-400 mb-2 group-hover:scale-110 transition-transform">∞</div>
                   <div className="text-gray-400 text-sm font-mono">Daily Limit</div>
                 </div>
               </div>
