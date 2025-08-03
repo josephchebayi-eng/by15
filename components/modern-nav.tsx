@@ -182,55 +182,63 @@ export default function ModernNav() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-emerald-500/30 bg-black/90 backdrop-blur-xl">
+          <div className="md:hidden border-t border-blue-500/30 bg-black/90 backdrop-blur-xl">
             <div className="px-4 py-6 space-y-4">
               <div className="space-y-3">
-                <div className="text-emerald-300 font-mono text-xs uppercase tracking-wider">AI Tools</div>
-                <Link 
-                  href="/generate/logo" 
-                  className="flex items-center space-x-3 text-gray-300 hover:text-emerald-400 transition-colors py-2"
+                <div className="text-blue-300 font-mono text-xs uppercase tracking-wider">AI Tools</div>
+                <Link
+                  href="/generate/logo"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Palette className="w-4 h-4" />
                   <span>Logo Generator</span>
                 </Link>
-                <Link 
-                  href="/generate/banner" 
-                  className="flex items-center space-x-3 text-gray-300 hover:text-emerald-400 transition-colors py-2"
+                <Link
+                  href="/generate/banner"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Target className="w-4 h-4" />
                   <span>Banner Creator</span>
                 </Link>
-                <Link 
-                  href="/generate/poster" 
-                  className="flex items-center space-x-3 text-gray-300 hover:text-emerald-400 transition-colors py-2"
+                <Link
+                  href="/generate/poster"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <TrendingUp className="w-4 h-4" />
                   <span>Poster Designer</span>
                 </Link>
-                <Link 
-                  href="/generate/slogan" 
-                  className="flex items-center space-x-3 text-gray-300 hover:text-emerald-400 transition-colors py-2"
+                <Link
+                  href="/generate/businesscard"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>Business Card Designer</span>
+                </Link>
+                <Link
+                  href="/generate/slogan"
+                  className="flex items-center space-x-3 text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Slogan Wizard</span>
                 </Link>
               </div>
-              
-              <div className="border-t border-emerald-500/20 pt-4">
-                <Link 
-                  href="/dashboard" 
-                  className="block text-gray-300 hover:text-emerald-400 transition-colors py-2"
+
+              <div className="border-t border-blue-500/20 pt-4">
+                <Link
+                  href="/dashboard"
+                  className="block text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  href="#showcase" 
-                  className="block text-gray-300 hover:text-emerald-400 transition-colors py-2"
+                <Link
+                  href="#showcase"
+                  className="block text-gray-300 hover:text-blue-400 transition-colors py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Examples
