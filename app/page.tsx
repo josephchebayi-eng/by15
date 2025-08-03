@@ -111,21 +111,21 @@ export default function HomePage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               onClick={() => setIsPromptPanelOpen(true)}
-              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-lg px-8 py-4 h-auto shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 group"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 h-auto shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 group"
             >
               <Sparkles className="mr-3 w-5 h-5 group-hover:rotate-12 transition-transform" />
               Start Creating
               <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            
-            <Button 
-              size="lg" 
+
+            <Button
+              size="lg"
               variant="outline"
               asChild
-              className="border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 text-lg px-8 py-4 h-auto backdrop-blur-sm transition-all duration-300 group"
+              className="border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/10 text-lg px-8 py-4 h-auto backdrop-blur-sm transition-all duration-300 group"
             >
               <Link href="#showcase">
                 <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />
