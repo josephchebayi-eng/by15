@@ -204,7 +204,7 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
               <div>
                 <Label className="text-xs text-gray-400">Quality</Label>
                 <Select defaultValue="high">
-                  <SelectTrigger className="bg-black/50 border-gray-700 focus:border-emerald-500 text-white text-sm">
+                  <SelectTrigger className="bg-black/50 border-gray-700 focus:border-blue-500 text-white text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-black/90 backdrop-blur-xl border-gray-700">
