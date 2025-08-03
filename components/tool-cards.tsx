@@ -145,8 +145,8 @@ export default function ToolCards() {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 {/* Glow Effect */}
-                <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-600/30 to-${tool.color}-800/30 rounded-3xl blur-xl transition-all duration-500 ${
-                  isHovered ? 'opacity-100 blur-2xl' : 'opacity-0'
+                <div className={`absolute inset-0 bg-gradient-to-br from-lime-500/20 to-lime-600/15 rounded-3xl blur-xl transition-all duration-500 ${
+                  isHovered ? 'opacity-100 blur-2xl' : 'opacity-60'
                 }`}></div>
 
                 <Card className={`relative bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime transition-all duration-500 rounded-3xl overflow-hidden ${
