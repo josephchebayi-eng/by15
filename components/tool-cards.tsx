@@ -212,7 +212,7 @@ export default function ToolCards() {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center space-x-8 bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl px-8 py-6 shadow-xl">
+          <div className="inline-flex items-center space-x-8 bg-lime-glass-300 backdrop-blur-xl border border-lime-500/30 rounded-xl px-8 py-6 shadow-glass-lime">
             <div className="flex items-center space-x-3">
               <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
               <span className="text-slate-300 font-medium text-sm uppercase tracking-wider">System Operational</span>
