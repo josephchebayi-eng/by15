@@ -282,7 +282,7 @@ export default function ApiKeysPage() {
         </div>
 
         {/* Security Notice */}
-        <Card className="mt-8 bg-black/80 backdrop-blur-xl border border-yellow-500/40">
+        <Card className="mt-8 bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
           <CardHeader>
             <CardTitle className="text-yellow-400">🔒 SECURITY NOTICE</CardTitle>
           </CardHeader>
