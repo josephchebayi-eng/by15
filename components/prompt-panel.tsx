@@ -14,16 +14,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  Wand2, 
-  Sparkles, 
-  Settings, 
+import {
+  Wand2,
+  Sparkles,
+  Settings,
   Palette,
   Target,
   TrendingUp,
   MessageSquare,
   Type,
   Hash,
+  CreditCard,
   ArrowRight,
   X
 } from 'lucide-react'
