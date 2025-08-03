@@ -172,7 +172,7 @@ export default function ModernNav() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-gray-300 hover:text-emerald-400"
+              className="md:hidden text-gray-300 hover:text-blue-400"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
