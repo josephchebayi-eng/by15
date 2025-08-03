@@ -160,19 +160,23 @@ function GlassyCubes() {
 export default function HeroBackground() {
   return (
     <div className="absolute inset-0 z-0">
-      <Canvas
-        camera={{ position: [0, 0, 8], fov: 60 }}
-        style={{ background: 'transparent' }}
-      >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={0.6} color="#ffffff" />
-        <pointLight position={[-10, -10, -5]} intensity={0.4} color="#8b5cf6" />
-        <pointLight position={[5, 5, 2]} intensity={0.3} color="#3b82f6" />
-        <spotLight position={[0, 10, 0]} intensity={0.5} color="#ec4899" angle={0.3} />
-        <LargeGlassyBlob />
-        <FlowingGlassRings />
-        <GlassyCubes />
-      </Canvas>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Canvas
+          camera={{ position: [0, 0, 8], fov: 60 }}
+          style={{ background: 'transparent' }}
+          gl={{ antialias: true, alpha: true }}
+          onError={(error) => console.warn('Three.js Canvas Error:', error)}
+        >
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[10, 10, 5]} intensity={0.6} color="#ffffff" />
+          <pointLight position={[-10, -10, -5]} intensity={0.4} color="#8b5cf6" />
+          <pointLight position={[5, 5, 2]} intensity={0.3} color="#3b82f6" />
+          <spotLight position={[0, 10, 0]} intensity={0.5} color="#ec4899" angle={0.3} />
+          <LargeGlassyBlob />
+          <FlowingGlassRings />
+          <GlassyCubes />
+        </Canvas>
+      </ErrorBoundary>
     </div>
   )
 }
