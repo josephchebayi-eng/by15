@@ -244,7 +244,7 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Credits remaining</span>
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
                   Unlimited
                 </Badge>
               </div>
