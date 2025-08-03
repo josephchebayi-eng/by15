@@ -222,7 +222,7 @@ export default function HomePage() {
             {/* Feature 3 */}
             <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/50 shadow-glass-lime hover:shadow-glass-lime-hover transition-all duration-300 group">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-lime-500/80 to-lime-600/80 rounded-2xl flex items-center justify-center shadow-lg shadow-lime-500/25 group-hover:shadow-lime-500/40 transition-all duration-300">
                   <Users className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">Team Collaboration</h3>
