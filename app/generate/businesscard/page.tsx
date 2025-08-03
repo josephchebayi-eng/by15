@@ -65,7 +65,7 @@ export default function BusinessCardGenerator() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Panel */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-pink-500/40 shadow-2xl">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle className="text-pink-400 flex items-center">
                 <Palette className="w-5 h-5 mr-2" />
@@ -158,7 +158,7 @@ export default function BusinessCardGenerator() {
           </Card>
 
           {/* Preview Panel */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-pink-500/40 shadow-2xl">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle className="text-pink-400 flex items-center">
                 <Type className="w-5 h-5 mr-2" />

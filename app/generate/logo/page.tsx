@@ -84,7 +84,7 @@ export default function LogoGeneratorPage() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Form */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-blue-500/40">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Sparkles className="w-5 h-5 mr-2 text-blue-600" />
@@ -168,7 +168,7 @@ export default function LogoGeneratorPage() {
           </Card>
 
           {/* Logo Preview */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-blue-500/40">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle>Logo Preview</CardTitle>
               <CardDescription>
