@@ -178,7 +178,7 @@ export default function DashboardPage() {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {quickStats.map((stat, index) => (
-            <Card key={index} className="bg-black/80 backdrop-blur-xl border border-emerald-500/40">
+            <Card key={index} className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -200,7 +200,7 @@ export default function DashboardPage() {
             {generationTools.map((tool) => (
               <Card
                 key={tool.id}
-                className={`bg-black/80 backdrop-blur-xl border ${tool.borderColor} hover:border-opacity-60 transition-all duration-300 group cursor-pointer`}
+                className={`bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/50 shadow-glass-lime hover:shadow-glass-lime-hover transition-all duration-300 group cursor-pointer`}
                 onMouseEnter={() => setSelectedTool(tool.id)}
                 onMouseLeave={() => setSelectedTool(null)}
               >
@@ -242,7 +242,7 @@ export default function DashboardPage() {
         </div>
 
         {/* System Status */}
-        <Card className="bg-black/80 backdrop-blur-xl border border-emerald-500/40">
+        <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <BarChart3 className="w-5 h-5 mr-2 text-emerald-400" />

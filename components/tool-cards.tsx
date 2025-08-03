@@ -145,20 +145,20 @@ export default function ToolCards() {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 {/* Glow Effect */}
-                <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-600/30 to-${tool.color}-800/30 rounded-3xl blur-xl transition-all duration-500 ${
-                  isHovered ? 'opacity-100 blur-2xl' : 'opacity-0'
+                <div className={`absolute inset-0 bg-gradient-to-br from-lime-500/20 to-lime-600/15 rounded-3xl blur-xl transition-all duration-500 ${
+                  isHovered ? 'opacity-100 blur-2xl' : 'opacity-60'
                 }`}></div>
 
-                <Card className={`relative bg-black/80 backdrop-blur-xl border-${tool.color}-500/40 shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden ${
-                  isHovered ? `shadow-${tool.color}-500/20 scale-105` : ''
+                <Card className={`relative bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime transition-all duration-500 rounded-3xl overflow-hidden ${
+                  isHovered ? 'shadow-glass-lime-hover scale-105 border-lime-400/50' : ''
                 }`}>
                   {/* Background Pattern */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/10 via-transparent to-transparent`}></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-lime-500/10 via-lime-400/5 to-transparent"></div>
                   
                   {/* Decorative Corner */}
-                  <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <div className="absolute top-0 right-0 w-32 h-32 opacity-15">
                     <div
-                      className={`w-full h-full bg-gradient-to-br from-${tool.color}-400 to-transparent`}
+                      className="w-full h-full bg-gradient-to-br from-lime-400/40 to-transparent"
                       style={{
                         clipPath: "polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%)",
                       }}
@@ -212,7 +212,7 @@ export default function ToolCards() {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center space-x-8 bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl px-8 py-6 shadow-xl">
+          <div className="inline-flex items-center space-x-8 bg-lime-glass-300 backdrop-blur-xl border border-lime-500/30 rounded-xl px-8 py-6 shadow-glass-lime">
             <div className="flex items-center space-x-3">
               <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
               <span className="text-slate-300 font-medium text-sm uppercase tracking-wider">System Operational</span>

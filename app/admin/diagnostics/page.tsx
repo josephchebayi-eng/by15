@@ -184,7 +184,7 @@ export default function DiagnosticsPage() {
         {diagnostics && (
           <>
             {/* Summary */}
-            <Card className="mb-8 bg-black/80 backdrop-blur-xl border border-emerald-500/40">
+            <Card className="mb-8 bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <Activity className="w-5 h-5 mr-2 text-emerald-400" />
@@ -223,7 +223,7 @@ export default function DiagnosticsPage() {
             </Card>
 
             {/* Provider Status */}
-            <Card className="mb-8 bg-black/80 backdrop-blur-xl border border-emerald-500/40">
+            <Card className="mb-8 bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <Server className="w-5 h-5 mr-2 text-emerald-400" />
@@ -271,7 +271,7 @@ export default function DiagnosticsPage() {
             </Card>
 
             {/* Module Tests */}
-            <Card className="bg-black/80 backdrop-blur-xl border border-emerald-500/40">
+            <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
                   <Zap className="w-5 h-5 mr-2 text-emerald-400" />
@@ -284,7 +284,7 @@ export default function DiagnosticsPage() {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
                   {Object.entries(diagnostics.moduleTests).map(([moduleName, result]) => (
-                    <Card key={moduleName} className="bg-gray-900/60 border border-gray-700">
+                    <Card key={moduleName} className="bg-lime-glass-100 border border-lime-500/20 shadow-glass-lime">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center">

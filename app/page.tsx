@@ -144,8 +144,8 @@ export default function HomePage() {
 
           {/* Stats Cards */}
           <div className="relative animate-fade-in" style={{ animationDelay: '0.8s' }}>
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-slate-600/10 rounded-2xl blur-2xl"></div>
-            <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-lime-500/15 to-lime-600/10 rounded-2xl blur-2xl"></div>
+            <div className="relative bg-lime-glass-300 backdrop-blur-xl border border-lime-500/30 rounded-2xl p-8 shadow-glass-lime">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
                 <div className="group">
                   <div className="text-4xl font-bold text-emerald-400 mb-3 group-hover:scale-105 transition-transform">99.9%</div>
@@ -194,9 +194,9 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <Card className="bg-black/80 backdrop-blur-xl border border-blue-500/40 hover:border-blue-500/60 transition-all duration-300 group">
+            <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/50 shadow-glass-lime hover:shadow-glass-lime-hover transition-all duration-300 group">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-lime-500/80 to-lime-600/80 rounded-2xl flex items-center justify-center shadow-lg shadow-lime-500/25 group-hover:shadow-lime-500/40 transition-all duration-300">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">Lightning Fast</h3>
@@ -207,9 +207,9 @@ export default function HomePage() {
             </Card>
 
             {/* Feature 2 */}
-            <Card className="bg-black/80 backdrop-blur-xl border border-purple-500/40 hover:border-purple-500/60 transition-all duration-300 group">
+            <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/50 shadow-glass-lime hover:shadow-glass-lime-hover transition-all duration-300 group">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25 group-hover:shadow-purple-500/40 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-lime-500/80 to-lime-600/80 rounded-2xl flex items-center justify-center shadow-lg shadow-lime-500/25 group-hover:shadow-lime-500/40 transition-all duration-300">
                   <Crown className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">Premium Quality</h3>
@@ -220,9 +220,9 @@ export default function HomePage() {
             </Card>
 
             {/* Feature 3 */}
-            <Card className="bg-black/80 backdrop-blur-xl border border-green-500/40 hover:border-green-500/60 transition-all duration-300 group">
+            <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 hover:border-lime-400/50 shadow-glass-lime hover:shadow-glass-lime-hover transition-all duration-300 group">
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:shadow-green-500/40 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-lime-500/80 to-lime-600/80 rounded-2xl flex items-center justify-center shadow-lg shadow-lime-500/25 group-hover:shadow-lime-500/40 transition-all duration-300">
                   <Users className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4">Team Collaboration</h3>

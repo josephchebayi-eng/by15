@@ -113,7 +113,7 @@ export default function SloganGeneratorPage() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Form */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-purple-500/40">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle className="flex items-center text-white">
                 <Sparkles className="w-5 h-5 mr-2 text-purple-400" />
@@ -221,7 +221,7 @@ export default function SloganGeneratorPage() {
           </Card>
 
           {/* Generated Slogans Display */}
-          <Card className="bg-black/80 backdrop-blur-xl border border-purple-500/40">
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
               <CardTitle className="text-white">GENERATED SLOGANS</CardTitle>
               <CardDescription className="text-gray-400 font-mono">
