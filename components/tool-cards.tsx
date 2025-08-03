@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { 
-  Palette, 
-  Target, 
-  TrendingUp, 
-  MessageSquare, 
-  Type, 
+import {
+  Palette,
+  Target,
+  TrendingUp,
+  MessageSquare,
+  Type,
   Hash,
+  CreditCard,
   Sparkles,
   ArrowRight,
   Zap,
