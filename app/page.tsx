@@ -229,36 +229,36 @@ export default function HomePage() {
 
       {/* Final CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/50 via-teal-900/50 to-green-900/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-purple-900/50 to-pink-900/50"></div>
         <div className="relative max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent">
               Ready to Transform
             </span>
             <br />
             <span className="text-gray-200 text-3xl md:text-5xl">Your Brand?</span>
           </h2>
           <p className="text-xl text-gray-300 mb-12 leading-relaxed">
-            Join thousands of businesses using AI to create stunning brand assets. 
+            Join thousands of businesses using AI to create stunning brand assets.
             Start your creative journey today.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-lg px-10 py-4 h-auto shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 group"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-10 py-4 h-auto shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 group"
               >
                 <Database className="mr-3 w-5 h-5" />
                 Access Dashboard
                 <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            
+
             <Button
               size="lg"
               variant="outline"
               onClick={() => setIsPromptPanelOpen(true)}
-              className="border-2 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 text-lg px-10 py-4 h-auto backdrop-blur-sm transition-all duration-300 group"
+              className="border-2 border-blue-500/50 text-blue-400 hover:bg-blue-500/10 text-lg px-10 py-4 h-auto backdrop-blur-sm transition-all duration-300 group"
             >
               <Wand2 className="mr-3 w-5 h-5 group-hover:rotate-12 transition-transform" />
               Try AI Now
