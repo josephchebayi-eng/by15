@@ -51,7 +51,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 relative overflow-hidden">
       {/* Global 3D Background */}
       <Suspense fallback={<div className="absolute inset-0 bg-transparent" />}>
         <ThreeBackground />
