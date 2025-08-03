@@ -96,7 +96,7 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
         <CardContent className="p-6 space-y-6 overflow-y-auto h-full">
           {/* Tool Selection */}
           <div className="space-y-3">
-            <Label className="text-emerald-300 font-mono text-xs uppercase tracking-wider">
+            <Label className="text-blue-300 font-mono text-xs uppercase tracking-wider">
               Select Tool
             </Label>
             <div className="grid grid-cols-2 gap-2">
