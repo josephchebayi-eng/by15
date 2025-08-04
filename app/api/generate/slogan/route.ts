@@ -16,11 +16,11 @@ export async function POST(req: Request) {
 
     // Check if any providers are available
     const availability = await checkProviderAvailability()
-    if (!availability.hasAnyProvider) {
+    if (!availability.openai) {
       return Response.json(
         {
           success: false,
-          error: "No AI providers configured. Please set up API keys in the admin panel.",
+          error: "OpenAI API key not configured. Please set up API key in the admin panel.",
           needsConfiguration: true,
         },
         { status: 503 },
@@ -85,7 +85,6 @@ export async function POST(req: Request) {
         prompt: result.enhancedPrompt,
         provider: result.usedProvider,
         model: result.model,
-        fallbackUsed: result.fallbackUsed,
         promptEnhanced: result.promptEnhanced,
         regenerationCount: result.regenerationCount,
         message: `Generated ${slogans.length} professional slogans using ${result.usedProvider}${result.model ? ` (${result.model})` : ""}${result.regenerationCount > 0 ? ` (${result.regenerationCount} regenerations for quality)` : ""}`,
@@ -133,10 +132,10 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          error: "OpenAI generation service temporarily unavailable. Please try again later.",
+          error: `OpenAI generation failed: ${errorMessage}`,
           details: errorMessage,
         },
-        { status: 503 },
+        { status: 500 },
       )
     }
   } catch (error) {

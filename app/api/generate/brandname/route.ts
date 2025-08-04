@@ -1,4 +1,4 @@
-import { generateWithFallback, checkProviderAvailability } from "@/lib/ai-providers"
+import { generateText, checkProviderAvailability } from "@/lib/ai-providers"
 
 export async function POST(req: Request) {
   try {
@@ -6,11 +6,11 @@ export async function POST(req: Request) {
 
     // Check if any providers are available
     const availability = await checkProviderAvailability()
-    if (!availability.hasAnyProvider) {
+    if (!availability.openai) {
       return Response.json(
         {
           success: false,
-          error: "No AI providers configured. Please set up API keys in the admin panel.",
+          error: "OpenAI API key not configured. Please set up API key in the admin panel.",
         },
         { status: 503 },
       )
@@ -61,14 +61,13 @@ export async function POST(req: Request) {
     let enhancedPrompt: string | undefined
 
     try {
-      const result = await generateWithFallback(
+      const result = await generateText(
         basePrompt,
         systemPrompt,
         enhancePrompt,
       )
       namesText = result.text
       usedProvider = result.usedProvider
-      fallbackUsed = result.fallbackUsed
       model = result.model
       promptEnhanced = result.promptEnhanced
       enhancedPrompt = result.enhancedPrompt
@@ -108,7 +107,6 @@ export async function POST(req: Request) {
       enhancedPrompt: promptEnhanced ? enhancedPrompt : undefined,
       provider: usedProvider,
       model,
-      fallbackUsed,
       promptEnhanced,
       message: `Generated using ${usedProvider}${model ? ` (${model})` : ""}${promptEnhanced ? " with enhanced prompt" : ""}`,
     })

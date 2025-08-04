@@ -1,16 +1,34 @@
-import { generateImageWithFallback, generateDesignWithEnhancement, checkProviderAvailability } from "@/lib/ai-providers"
+import { generateImage, checkProviderAvailability } from "@/lib/ai-providers"
 
 export async function POST(req: Request) {
   try {
-    const { prompt, size, style, colors, text: posterText } = await req.json()
+    const { prompt, provider, size, style, colors, text: posterText } = await req.json()
 
-    // Check if any providers are available
-    const availability = await checkProviderAvailability()
-    if (!availability.hasAnyProvider) {
+    if (!prompt || !prompt.trim()) {
+      return Response.json(
+        { success: false, error: "Prompt is required" }, 
+        { status: 400 }
+      )
+    }
+
+    if (!provider || (provider !== "openai" && provider !== "flux")) {
       return Response.json(
         {
           success: false,
-          error: "No AI providers configured. Please set up API keys in the admin panel.",
+          error: "Valid provider (openai or flux) is required",
+        },
+        { status: 400 }
+      )
+    }
+
+    // Check if the selected provider is available
+    const availability = await checkProviderAvailability()
+    if ((provider === "openai" && !availability.openai) || (provider === "flux" && !availability.flux)) {
+      return Response.json(
+        {
+          success: false,
+          error: `${provider.toUpperCase()} API key not configured. Please set up API key in the admin panel.`,
+          needsConfiguration: true,
         },
         { status: 503 },
       )
@@ -19,80 +37,42 @@ export async function POST(req: Request) {
     // Prepare additional context for enhanced prompt generation
     const additionalContext = {
       size,
-      style,
-      colors,
+      style: style || "modern",
+      colors: colors || "vibrant",
       text: posterText,
       type: "poster",
       purpose: "marketing and advertising",
     }
 
-    let imageUrl: string
-    let usedProvider: string
-    let fallbackUsed: boolean
-    let model: string | undefined
-    let isPlaceholder = false
-    let description: string | undefined
-    let enhancedPrompt: string | undefined
-
     try {
-      console.log("🎨 Attempting poster image generation with enhanced prompt...")
-      const result = await generateImageWithFallback(prompt, "1024x1792", "poster", additionalContext)
-      imageUrl = result.imageUrl
-      usedProvider = result.usedProvider
-      fallbackUsed = result.fallbackUsed
-      isPlaceholder = result.isPlaceholder || false
-      description = result.description
-      enhancedPrompt = result.enhancedPrompt
-      model = "dall-e-3"
-    } catch (aiError) {
-      console.error("❌ OpenAI generation failed:", aiError)
+      const result = await generateImage(
+        provider,
+        prompt,
+        "1024x1792",
+        "poster",
+        additionalContext
+      )
 
-      // Create a helpful error message based on the error type
-      const errorMessage = aiError instanceof Error ? aiError.message : "Unknown error"
-
-      if (errorMessage.includes("quota") || errorMessage.includes("billing")) {
-        return Response.json(
-          {
-            success: false,
-            error: "OpenAI quota exceeded. Please check your billing settings or try again later.",
-            details: "Your OpenAI account has reached its billing limit. Please add credits or upgrade your plan.",
-          },
-          { status: 402 }, // Payment Required
-        )
-      }
-
+      return Response.json({
+        success: true,
+        imageUrl: result.imageUrl,
+        prompt: result.enhancedPrompt,
+        provider: result.usedProvider,
+        model: result.model,
+        promptEnhanced: result.promptEnhanced,
+        message: `Poster generated using ${result.usedProvider.toUpperCase()}${result.model ? ` (${result.model})` : ""}`,
+      })
+    } catch (error) {
+      console.error("❌ Poster generation error:", error)
+      const errorMessage = error instanceof Error ? error.message : "Poster generation failed."
       return Response.json(
         {
           success: false,
-          error: "OpenAI generation service temporarily unavailable. Please try again later.",
-          details: errorMessage,
+          error: errorMessage,
         },
-        { status: 503 },
+        { status: 500 },
       )
     }
-
-    // Prepare response based on whether we have a real image or placeholder
-    const response: any = {
-      success: true,
-      imageUrl,
-      prompt: enhancedPrompt || prompt,
-      provider: usedProvider,
-      model,
-      fallbackUsed,
-      isPlaceholder,
-      promptEnhanced: !!enhancedPrompt,
-    }
-
-    if (isPlaceholder && description) {
-      response.description = description
-      response.message = `Generated comprehensive design brief using ${usedProvider}${model ? ` (${model})` : ""} - Use this detailed description to create your poster`
-    } else {
-      response.message = fallbackUsed
-        ? `Generated using ${usedProvider}${model ? ` (${model})` : ""} with fallback`
-        : `Generated using ${usedProvider}${model ? ` (${model})` : ""}`
-    }
-
-    return Response.json(response)
   } catch (error) {
     console.error("❌ Poster generation error:", error)
     return Response.json(

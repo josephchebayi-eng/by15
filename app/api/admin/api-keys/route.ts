@@ -35,6 +35,7 @@ export async function GET() {
       success: true,
       keys: {
         openai_configured: !!keys.openai_api_key,
+        flux_configured: !!keys.flux_api_key,
       },
     })
   } catch (error) {

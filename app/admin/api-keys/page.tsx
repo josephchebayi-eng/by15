@@ -11,14 +11,20 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface ApiKeyStatus {
   openai_configured: boolean
+  flux_configured: boolean
 }
 
 export default function ApiKeysPage() {
   const [openaiKey, setOpenaiKey] = useState("")
+  const [fluxKey, setFluxKey] = useState("")
   const [showOpenaiKey, setShowOpenaiKey] = useState(false)
+  const [showFluxKey, setShowFluxKey] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
-  const [keyStatus, setKeyStatus] = useState<ApiKeyStatus>({ openai_configured: false })
+  const [keyStatus, setKeyStatus] = useState<ApiKeyStatus>({ 
+    openai_configured: false, 
+    flux_configured: false 
+  })
 
   useEffect(() => {
     checkKeyStatus()
@@ -66,6 +72,8 @@ export default function ApiKeysPage() {
         // Clear the input field for security
         if (keyName === "openai_api_key") {
           setOpenaiKey("")
+        } else if (keyName === "flux_api_key") {
+          setFluxKey("")
         }
       } else {
         setMessage({ type: "error", text: data.error || "Failed to save API key" })
@@ -216,6 +224,89 @@ export default function ApiKeysPage() {
             </CardContent>
           </Card>
 
+          {/* FLUX AI API Key */}
+          <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center text-white">
+                    <Key className="w-5 h-5 mr-2 text-emerald-400" />
+                    FLUX.1 AI API Key
+                  </CardTitle>
+                  <CardDescription className="text-gray-400 font-mono">
+                    Required for FLUX.1 image generation via Together AI
+                  </CardDescription>
+                </div>
+                <Badge
+                  className={`font-mono ${
+                    keyStatus.flux_configured
+                      ? "bg-green-500/20 text-green-300 border-green-500/30"
+                      : "bg-red-500/20 text-red-300 border-red-500/30"
+                  }`}
+                >
+                  {keyStatus.flux_configured ? (
+                    <>
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      CONFIGURED
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-3 h-3 mr-1" />
+                      NOT SET
+                    </>
+                  )}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="flux-key" className="text-gray-300 font-mono">
+                  API KEY
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="flux-key"
+                    type={showFluxKey ? "text" : "password"}
+                    placeholder="Enter your Together AI API key..."
+                    value={fluxKey}
+                    onChange={(e) => setFluxKey(e.target.value)}
+                    className="bg-gray-900/80 border-emerald-500/40 text-gray-200 placeholder-gray-400 pr-20"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-12 top-0 h-full px-3 text-gray-400 hover:text-emerald-400"
+                    onClick={() => setShowFluxKey(!showFluxKey)}
+                  >
+                    {showFluxKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 text-emerald-400 hover:text-emerald-300"
+                    onClick={() => handleSaveKey("flux_api_key", fluxKey)}
+                    disabled={isLoading || !fluxKey.trim()}
+                  >
+                    <Save className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="text-xs text-gray-500 font-mono">
+                Get your API key from{" "}
+                <a
+                  href="https://api.together.xyz/settings/api-keys"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-400 hover:text-emerald-300"
+                >
+                  api.together.xyz/settings/api-keys
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* System Status */}
           <Card className="bg-lime-glass-200 backdrop-blur-xl border border-lime-500/30 shadow-glass-lime">
             <CardHeader>
@@ -229,24 +320,24 @@ export default function ApiKeysPage() {
                     <span className="text-gray-300 font-mono text-sm">LOGO GENERATION</span>
                     <Badge
                       className={`text-xs font-mono ${
-                        keyStatus.openai_configured
+                        keyStatus.openai_configured || keyStatus.flux_configured
                           ? "bg-green-500/20 text-green-300 border-green-500/30"
                           : "bg-red-500/20 text-red-300 border-red-500/30"
                       }`}
                     >
-                      {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
+                      {keyStatus.openai_configured || keyStatus.flux_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-300 font-mono text-sm">IMAGE GENERATION</span>
                     <Badge
                       className={`text-xs font-mono ${
-                        keyStatus.openai_configured
+                        keyStatus.openai_configured || keyStatus.flux_configured
                           ? "bg-green-500/20 text-green-300 border-green-500/30"
                           : "bg-red-500/20 text-red-300 border-red-500/30"
                       }`}
                     >
-                      {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
+                      {keyStatus.openai_configured || keyStatus.flux_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                 </div>
@@ -273,6 +364,18 @@ export default function ApiKeysPage() {
                       }`}
                     >
                       {keyStatus.openai_configured ? "ACTIVE" : "OFFLINE"}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-300 font-mono text-sm">FLUX.1 AI</span>
+                    <Badge
+                      className={`text-xs font-mono ${
+                        keyStatus.flux_configured
+                          ? "bg-green-500/20 text-green-300 border-green-500/30"
+                          : "bg-red-500/20 text-red-300 border-red-500/30"
+                      }`}
+                    >
+                      {keyStatus.flux_configured ? "ACTIVE" : "OFFLINE"}
                     </Badge>
                   </div>
                 </div>

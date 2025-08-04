@@ -27,6 +27,7 @@ interface GenerationResult {
 
 export default function PosterGeneratorPage() {
   const [prompt, setPrompt] = useState("")
+  const [selectedProvider, setSelectedProvider] = useState("openai")
   const [posterText, setPosterText] = useState("")
   const [size, setSize] = useState("A4")
   const [style, setStyle] = useState("modern")
@@ -48,6 +49,7 @@ export default function PosterGeneratorPage() {
         },
         body: JSON.stringify({
           prompt,
+          provider: selectedProvider,
           size,
           style,
           colors,
@@ -201,6 +203,21 @@ export default function PosterGeneratorPage() {
                   onChange={(e) => setColors(e.target.value)}
                   className="bg-gray-900/80 border-green-500/40 text-gray-200 placeholder-gray-400"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="provider" className="text-gray-300 font-mono">
+                  IMAGE PROVIDER
+                </Label>
+                <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                  <SelectTrigger className="bg-gray-900/80 border-green-500/40 text-gray-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black/90 backdrop-blur-xl border-green-500/40">
+                    <SelectItem value="openai">DALL·E 3 (OpenAI)</SelectItem>
+                    <SelectItem value="flux">FLUX.1 AI (Together AI)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button

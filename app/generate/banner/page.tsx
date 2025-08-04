@@ -14,6 +14,7 @@ import Link from "next/link"
 
 export default function BannerGeneratorPage() {
   const [prompt, setPrompt] = useState("")
+  const [selectedProvider, setSelectedProvider] = useState("openai")
   const [dimensions, setDimensions] = useState("1920x1080")
   const [style, setStyle] = useState("modern")
   const [colors, setColors] = useState("blue and white")
@@ -44,6 +45,7 @@ export default function BannerGeneratorPage() {
         },
         body: JSON.stringify({
           prompt,
+          provider: selectedProvider,
           dimensions,
           style,
           colors,
@@ -303,6 +305,21 @@ export default function BannerGeneratorPage() {
                   onChange={(e) => setColors(e.target.value)}
                   className="bg-gray-900/80 border-teal-500/40 text-gray-200 placeholder-gray-400"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="provider" className="text-gray-300 font-mono">
+                  IMAGE PROVIDER
+                </Label>
+                <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                  <SelectTrigger className="bg-gray-900/80 border-teal-500/40 text-gray-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black/90 backdrop-blur-xl border-teal-500/40">
+                    <SelectItem value="openai">DALL·E 3 (OpenAI)</SelectItem>
+                    <SelectItem value="flux">FLUX.1 AI (Together AI)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button

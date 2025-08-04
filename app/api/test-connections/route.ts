@@ -1,6 +1,6 @@
 import {
-  generateWithFallback,
-  generateImageWithFallback,
+  generateText,
+  generateImage,
   checkProviderAvailability,
 } from "@/lib/ai-providers"
 
@@ -33,7 +33,7 @@ export async function GET() {
         console.log(`🧪 Testing ${module.name} module...`)
 
         const startTime = Date.now()
-        const result = await generateWithFallback(
+        const result = await generateText(
           module.prompt,
           `You are testing the ${module.name} generation system. Provide a brief test response.`,
           false, // Skip prompt enhancement for tests
@@ -45,7 +45,6 @@ export async function GET() {
           responseTime: endTime - startTime,
           provider: result.usedProvider,
           model: result.model,
-          fallbackUsed: result.fallbackUsed,
           promptEnhanced: result.promptEnhanced,
           responseLength: result.text.length,
           preview: result.text.substring(0, 100) + "...",
@@ -64,11 +63,10 @@ export async function GET() {
     // Test image generation (will likely fail due to OpenAI quota, but test the fallback)
     try {
       console.log("🖼️ Testing image generation...")
-      const imageResult = await generateImageWithFallback("A simple test image", "1024x1024")
+      const imageResult = await generateImage("openai", "A simple test image", "1024x1024")
       testResults.moduleTests["image"] = {
         status: "success",
         provider: imageResult.usedProvider,
-        fallbackUsed: imageResult.fallbackUsed,
         promptEnhanced: imageResult.promptEnhanced,
       }
     } catch (error) {

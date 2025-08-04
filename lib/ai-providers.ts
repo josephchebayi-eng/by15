@@ -414,20 +414,19 @@ export async function generateWithOpenAI(prompt: string, systemPrompt?: string) 
   }
 }
 
-// Simplified generation function using only OpenAI
-export async function generateWithFallback(
+// Text generation function (formerly generateWithFallback)
+export async function generateText(
   originalPrompt: string,
   systemPrompt?: string,
   enhancePrompt = true,
 ): Promise<{
   text: string
   usedProvider: string
-  fallbackUsed: boolean
   model?: string
   promptEnhanced: boolean
   enhancedPrompt?: string
 }> {
-  console.log(`🚀 Starting generation with OpenAI`)
+  console.log(`🚀 Starting text generation with OpenAI`)
 
   // Enhance the prompt if requested
   let finalPrompt = originalPrompt
@@ -461,7 +460,6 @@ export async function generateWithFallback(
     return {
       text,
       usedProvider: "openai",
-      fallbackUsed: false,
       model: "gpt-4o",
       promptEnhanced,
       enhancedPrompt,
@@ -489,7 +487,6 @@ export async function generateDesignWithEnhancement(
 ): Promise<{
   text: string
   usedProvider: string
-  fallbackUsed: boolean
   model?: string
   promptEnhanced: boolean
   enhancedPrompt: string
@@ -538,7 +535,6 @@ export async function generateDesignWithEnhancement(
         return {
           text,
           usedProvider: "openai",
-          fallbackUsed: false,
           model: "gpt-4o",
           promptEnhanced,
           enhancedPrompt: finalPrompt,
@@ -565,32 +561,6 @@ export async function generateDesignWithEnhancement(
   }
 
   throw new Error(`Failed to generate acceptable ${designType} after ${maxRetries + 1} attempts`)
-}
-
-// SVG to other formats conversion utility
-export async function convertSvgToFormats(svgContent: string): Promise<{
-  svg: string
-  png: string
-  jpeg: string
-}> {
-  try {
-    // For now, return the SVG and placeholder URLs for other formats
-    // In a real implementation, you would use a service like Cloudinary or a server-side conversion
-    const svgDataUrl = `data:image/svg+xml;base64,${Buffer.from(svgContent).toString("base64")}`
-
-    return {
-      svg: svgContent,
-      png: svgDataUrl, // Placeholder - would need server-side conversion
-      jpeg: svgDataUrl, // Placeholder - would need server-side conversion
-    }
-  } catch (error) {
-    console.error("❌ Format conversion failed:", error)
-    return {
-      svg: svgContent,
-      png: svgContent,
-      jpeg: svgContent,
-    }
-  }
 }
 
 export async function generateImageWithOpenAI(prompt: string, size = "1024x1024") {
@@ -643,8 +613,60 @@ export async function generateImageWithOpenAI(prompt: string, size = "1024x1024"
   }
 }
 
-// Enhanced image generation with design-focused enhancement
-export async function generateImageWithFallback(
+export async function generateImageWithFluxAI(prompt: string, size = "1024x1024") {
+  try {
+    const { flux_api_key } = await getApiKeys()
+
+    if (!flux_api_key) {
+      throw new Error("FLUX AI API key not configured")
+    }
+
+    console.log("🔄 Attempting FLUX AI image generation...")
+
+    // Using Together AI's API for FLUX.1 models
+    const response = await fetch("https://api.together.xyz/v1/images/generations", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${flux_api_key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "black-forest-labs/FLUX.1-schnell",
+        prompt,
+        width: parseInt(size.split("x")[0]) || 1024,
+        height: parseInt(size.split("x")[1]) || 1024,
+        steps: 4,
+        n: 1,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("❌ FLUX AI Image API error:", errorData)
+
+      if (
+        errorData.error?.code === "insufficient_quota" ||
+        errorData.error?.message?.includes("quota") ||
+        errorData.error?.message?.includes("billing")
+      ) {
+        throw new Error("QUOTA_EXCEEDED")
+      }
+
+      throw new Error(`FLUX AI Image API error: ${errorData.error?.message || response.statusText}`)
+    }
+
+    const data = await response.json()
+    console.log("✅ FLUX AI image generation successful")
+    return data.data[0]?.url || ""
+  } catch (error) {
+    console.error("❌ FLUX AI image generation error:", error)
+    throw error
+  }
+}
+
+// New image generation function with explicit provider selection
+export async function generateImage(
+  provider: "openai" | "flux",
   originalPrompt: string,
   size = "1024x1024",
   designType: "logo" | "banner" | "poster" = "poster",
@@ -652,12 +674,12 @@ export async function generateImageWithFallback(
 ): Promise<{
   imageUrl: string
   usedProvider: string
-  fallbackUsed: boolean
+  model?: string
   promptEnhanced: boolean
-  isPlaceholder?: boolean
-  description?: string
-  enhancedPrompt?: string
+  enhancedPrompt: string
 }> {
+  console.log(`🎨 Starting image generation with ${provider.toUpperCase()}...`)
+
   // Always enhance image prompts with design-focused enhancement
   const enhancement = await PromptEnhancer.enhancePromptToDesignDescription(
     originalPrompt,
@@ -670,136 +692,66 @@ export async function generateImageWithFallback(
 
   console.log(`🎨 Image prompt enhanced for ${designType}: ${promptEnhanced ? "Yes" : "No"}`)
 
-  try {
-    console.log("🔄 Attempting image generation with OpenAI...")
-    const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
-    console.log("✅ Successfully generated image using OpenAI")
-    return {
-      imageUrl,
-      usedProvider: "openai",
-      fallbackUsed: false,
-      promptEnhanced,
-      enhancedPrompt: finalPrompt,
-    }
-  } catch (error) {
-    console.error("❌ OpenAI image generation failed:", error)
+  let imageUrl: string
+  let model: string | undefined
 
-    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+  if (provider === "openai") {
+    imageUrl = await generateImageWithOpenAI(finalPrompt, size)
+    model = "dall-e-3"
+  } else if (provider === "flux") {
+    imageUrl = await generateImageWithFluxAI(finalPrompt, size)
+    model = "flux.1-schnell"
+  } else {
+    throw new Error(`Unsupported provider: ${provider}`)
+  }
 
-    // Check if it's a quota/billing error
-    if (errorMessage.includes("QUOTA_EXCEEDED") || errorMessage.includes("quota") || errorMessage.includes("billing")) {
-      console.log("💡 OpenAI quota exceeded, generating detailed description instead...")
-
-      try {
-        // Generate a detailed visual description using OpenAI
-        const systemPrompt = `You are a world-class visual designer and art director with expertise in ${designType} design. Create extremely detailed visual descriptions that could be used by a designer to recreate the design perfectly.`
-
-        const result = await generateDesignWithEnhancement(
-          originalPrompt,
-          designType,
-          additionalContext,
-          systemPrompt,
-        )
-
-        const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent(`AI-Generated ${designType.charAt(0).toUpperCase() + designType.slice(1)} Design`)}`
-
-        return {
-          imageUrl: placeholderUrl,
-          usedProvider: result.usedProvider,
-          fallbackUsed: true,
-          promptEnhanced: true,
-          isPlaceholder: true,
-          description: result.text,
-          enhancedPrompt: result.enhancedPrompt,
-        }
-      } catch (descriptionError) {
-        console.error("❌ Description generation also failed:", descriptionError)
-
-        const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent("OpenAI quota exceeded - please check billing")}`
-        return {
-          imageUrl: placeholderUrl,
-          usedProvider: "placeholder",
-          fallbackUsed: true,
-          promptEnhanced,
-          isPlaceholder: true,
-          description: "OpenAI image generation quota exceeded. Please check your billing settings.",
-          enhancedPrompt: finalPrompt,
-        }
-      }
-    }
-
-    // For other errors, still try to generate a description
-    try {
-      console.log("💡 Image generation failed, creating visual description instead...")
-
-      const systemPrompt = `You are a professional ${designType} designer. Create detailed visual descriptions for design concepts.`
-
-      const result = await generateDesignWithEnhancement(
-        originalPrompt,
-        designType,
-        additionalContext,
-        systemPrompt,
-      )
-
-      const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent(`${designType.charAt(0).toUpperCase() + designType.slice(1)} Design Concept`)}`
-
-      return {
-        imageUrl: placeholderUrl,
-        usedProvider: result.usedProvider,
-        fallbackUsed: true,
-        promptEnhanced: true,
-        isPlaceholder: true,
-        description: result.text,
-        enhancedPrompt: result.enhancedPrompt,
-      }
-    } catch (fallbackError) {
-      console.error("❌ All image generation methods failed:", fallbackError)
-
-      const placeholderUrl = `/placeholder.svg?height=600&width=400&text=${encodeURIComponent("Image generation temporarily unavailable")}`
-      return {
-        imageUrl: placeholderUrl,
-        usedProvider: "placeholder",
-        fallbackUsed: true,
-        promptEnhanced,
-        isPlaceholder: true,
-        description: `Image generation failed: ${errorMessage}`,
-        enhancedPrompt: finalPrompt,
-      }
-    }
+  return {
+    imageUrl,
+    usedProvider: provider,
+    model,
+    promptEnhanced,
+    enhancedPrompt: finalPrompt,
   }
 }
 
-// Simplified provider availability check
+// Provider availability check
 export async function checkProviderAvailability(): Promise<{
   openai: boolean
+  flux: boolean
   hasAnyProvider: boolean
   diagnostics: {
     openai: string
+    flux: string
   }
 }> {
   try {
-    const { openai_api_key } = await getApiKeys()
+    const { openai_api_key, flux_api_key } = await getApiKeys()
 
     const openaiAvailable = !!openai_api_key && openai_api_key.trim().length > 0
+    const fluxAvailable = !!flux_api_key && flux_api_key.trim().length > 0
 
     const diagnostics = {
       openai: openaiAvailable ? `✅ Key configured (${openai_api_key.substring(0, 7)}...)` : "❌ No API key configured",
+      flux: fluxAvailable ? `✅ Key configured (${flux_api_key.substring(0, 7)}...)` : "❌ No API key configured",
     }
 
     console.log("🔍 Provider availability check:", diagnostics)
 
     return {
       openai: openaiAvailable,
-      hasAnyProvider: openaiAvailable,
+      flux: fluxAvailable,
+      hasAnyProvider: openaiAvailable || fluxAvailable,
       diagnostics,
     }
   } catch (error) {
     console.error("❌ Error checking provider availability:", error)
     return {
       openai: false,
+      flux: false,
       hasAnyProvider: false,
       diagnostics: {
         openai: "❌ Error checking availability",
+        flux: "❌ Error checking availability",
       },
     }
   }

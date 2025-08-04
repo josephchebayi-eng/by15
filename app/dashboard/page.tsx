@@ -268,6 +268,10 @@ export default function DashboardPage() {
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">ACTIVE</Badge>
                   </div>
                   <div className="flex items-center justify-between">
+                    <span className="text-gray-300 text-sm">FLUX.1 AI</span>
+                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">ACTIVE</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
                     <span className="text-gray-300 text-sm">Prompt Enhancement</span>
                     <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs">WORKING</Badge>
                   </div>

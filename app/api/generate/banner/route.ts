@@ -1,64 +1,78 @@
-import { generateImageWithFallback, generateWithFallback, checkProviderAvailability } from "@/lib/ai-providers"
+import { generateImage, checkProviderAvailability } from "@/lib/ai-providers"
 
 export async function POST(req: Request) {
   try {
-    const { prompt, dimensions, style, colors } = await req.json()
+    const { prompt, provider, dimensions, style, colors } = await req.json()
 
-    // Check if any providers are available
-    const availability = await checkProviderAvailability()
-    if (!availability.hasAnyProvider) {
+    if (!prompt || !prompt.trim()) {
+      return Response.json(
+        { success: false, error: "Prompt is required" }, 
+        { status: 400 }
+      )
+    }
+
+    if (!provider || (provider !== "openai" && provider !== "flux")) {
       return Response.json(
         {
           success: false,
-          error: "No AI providers configured. Please set up API keys in the admin panel.",
+          error: "Valid provider (openai or flux) is required",
+        },
+        { status: 400 }
+      )
+    }
+
+    // Check if the selected provider is available
+    const availability = await checkProviderAvailability()
+    if ((provider === "openai" && !availability.openai) || (provider === "flux" && !availability.flux)) {
+      return Response.json(
+        {
+          success: false,
+          error: `${provider.toUpperCase()} API key not configured. Please set up API key in the admin panel.`,
+          needsConfiguration: true,
         },
         { status: 503 },
       )
     }
 
-    const enhancedPrompt = `Create a professional banner design: ${prompt}. 
-    Dimensions: ${dimensions}. 
-    Style: ${style}. 
-    Colors: ${colors}. 
-    High-quality, modern design suitable for marketing and branding. 
-    Professional layout with clear typography and visual hierarchy.`
-
-    let imageUrl: string
-    let usedProvider: string
-    let fallbackUsed: boolean
-    let model: string | undefined
+    // Prepare additional context for prompt enhancement
+    const additionalContext = {
+      dimensions,
+      style: style || "modern",
+      colors: colors || "professional",
+      type: "banner",
+      purpose: "digital marketing and campaigns",
+    }
 
     try {
-      // Use OpenAI DALL-E for image generation
       const imageSize = dimensions.includes("1920x1080") ? "1792x1024" : "1024x1024"
-      const result = await generateImageWithFallback(enhancedPrompt, imageSize, "banner")
-      imageUrl = result.imageUrl
-      usedProvider = result.usedProvider
-      fallbackUsed = result.fallbackUsed
-      model = result.model
-    } catch (aiError) {
-      console.error("OpenAI generation failed:", aiError)
+      const result = await generateImage(
+        provider,
+        prompt,
+        imageSize,
+        "banner",
+        additionalContext
+      )
 
+      return Response.json({
+        success: true,
+        imageUrl: result.imageUrl,
+        prompt: result.enhancedPrompt,
+        provider: result.usedProvider,
+        model: result.model,
+        promptEnhanced: result.promptEnhanced,
+        message: `Banner generated using ${result.usedProvider.toUpperCase()}${result.model ? ` (${result.model})` : ""}`,
+      })
+    } catch (error) {
+      console.error("❌ Banner generation error:", error)
+      const errorMessage = error instanceof Error ? error.message : "Banner generation failed."
       return Response.json(
         {
           success: false,
-          error: "AI generation service temporarily unavailable. Please try again later.",
+          error: errorMessage,
         },
-        { status: 503 },
+        { status: 500 },
       )
     }
-
-    return Response.json({
-      success: true,
-      imageUrl,
-      prompt: enhancedPrompt,
-      provider: usedProvider,
-      model,
-      fallbackUsed,
-      message: fallbackUsed
-        ? `Generated using ${usedProvider}${model ? ` (${model})` : ""} with fallback`
-        : `Generated using ${usedProvider}${model ? ` (${model})` : ""}`,
-    })
   } catch (error) {
     console.error("Banner generation error:", error)
     return Response.json(

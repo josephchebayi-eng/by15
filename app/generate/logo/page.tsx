@@ -14,6 +14,7 @@ import Image from "next/image"
 
 export default function LogoGeneratorPage() {
   const [prompt, setPrompt] = useState("")
+  const [selectedProvider, setSelectedProvider] = useState("openai")
   const [style, setStyle] = useState("")
   const [colors, setColors] = useState("")
   const [industry, setIndustry] = useState("")
@@ -30,7 +31,7 @@ export default function LogoGeneratorPage() {
       const res = await fetch("/api/generate/logo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, style, colors, industry }),
+        body: JSON.stringify({ prompt, style, colors, industry, provider: selectedProvider }),
       })
 
       const data = await res.json()
@@ -138,6 +139,21 @@ export default function LogoGeneratorPage() {
                   onChange={(e) => setIndustry(e.target.value)}
                   className="bg-gray-900/80 border-blue-500/40 text-gray-200 placeholder-gray-400"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="provider" className="text-gray-300 font-mono">
+                  IMAGE PROVIDER
+                </Label>
+                <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                  <SelectTrigger className="bg-gray-900/80 border-blue-500/40 text-gray-200">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black/90 backdrop-blur-xl border-blue-500/40">
+                    <SelectItem value="openai">DALL·E 3 (OpenAI)</SelectItem>
+                    <SelectItem value="flux">FLUX.1 AI (Together AI)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button

@@ -31,8 +31,7 @@ import {
 
 const models = [
   { id: 'dall-e-3', name: 'DALL·E 3', description: 'Latest OpenAI image model' },
-  { id: 'midjourney', name: 'Midjourney', description: 'Artistic style generation' },
-  { id: 'stable-diffusion', name: 'Stable Diffusion XL', description: 'Open-source powerhouse' }
+  { id: 'flux', name: 'FLUX.1 AI', description: 'High-quality image generation' }
 ]
 
 const styles = [
@@ -61,7 +60,7 @@ interface PromptPanelProps {
 
 export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
   const [selectedTool, setSelectedTool] = useState('logo')
-  const [selectedModel, setSelectedModel] = useState('dall-e-3')
+  const [selectedProvider, setSelectedProvider] = useState('openai')
   const [selectedStyle, setSelectedStyle] = useState('modern')
   const [prompt, setPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
@@ -140,21 +139,25 @@ export default function PromptPanel({ isOpen, onClose }: PromptPanelProps) {
           {/* Model Selection */}
           <div className="space-y-3">
             <Label className="text-blue-300 font-mono text-xs uppercase tracking-wider">
-              AI Model
+              Image Provider
             </Label>
-            <Select value={selectedModel} onValueChange={setSelectedModel}>
+            <Select value={selectedProvider} onValueChange={setSelectedProvider}>
               <SelectTrigger className="bg-black/50 border-gray-700 focus:border-blue-500 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-black/90 backdrop-blur-xl border-gray-700">
-                {models.map((model) => (
-                  <SelectItem key={model.id} value={model.id} className="text-gray-300 focus:text-white">
-                    <div>
-                      <div className="font-medium">{model.name}</div>
-                      <div className="text-xs text-gray-500">{model.description}</div>
-                    </div>
-                  </SelectItem>
-                ))}
+                <SelectItem value="openai" className="text-gray-300 focus:text-white">
+                  <div>
+                    <div className="font-medium">DALL·E 3</div>
+                    <div className="text-xs text-gray-500">OpenAI's latest image model</div>
+                  </div>
+                </SelectItem>
+                <SelectItem value="flux" className="text-gray-300 focus:text-white">
+                  <div>
+                    <div className="font-medium">FLUX.1 AI</div>
+                    <div className="text-xs text-gray-500">High-quality image generation</div>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
