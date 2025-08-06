@@ -1,8 +1,25 @@
-import { generateImageWithFallback, generateWithFallback, checkProviderAvailability } from "@/lib/ai-providers"
+import { generateImageWithFallback, checkProviderAvailability } from "@/lib/ai-providers"
+
+interface GenerateBannerRequest {
+  prompt: string
+  dimensions: string
+  style: string
+  colors: string
+  provider?: 'openai' | 'flux'
+  enhancePrompt?: boolean
+}
+
+async function enhancePromptForImage(prompt: string, style: string, colors: string): Promise<string> {
+  return `Create a professional banner design: ${prompt}. 
+  Style: ${style}. 
+  Colors: ${colors}.
+  High-quality, modern design suitable for marketing and branding. 
+  Professional layout with clear typography and visual hierarchy.`
+}
 
 export async function POST(req: Request) {
   try {
-    const { prompt, dimensions, style, colors } = await req.json()
+    const { prompt, dimensions, style, colors, provider = 'openai', enhancePrompt = true }: GenerateBannerRequest = await req.json()
 
     // Check if any providers are available
     const availability = await checkProviderAvailability()
@@ -16,32 +33,31 @@ export async function POST(req: Request) {
       )
     }
 
-    const enhancedPrompt = `Create a professional banner design: ${prompt}. 
-    Dimensions: ${dimensions}. 
-    Style: ${style}. 
-    Colors: ${colors}. 
-    High-quality, modern design suitable for marketing and branding. 
-    Professional layout with clear typography and visual hierarchy.`
-
     let imageUrl: string
-    let usedProvider: string
-    let fallbackUsed: boolean
-    let model: string | undefined
+    let usedProvider = provider
+    let fallbackUsed = false
+    let model = provider === 'openai' ? 'dall-e-3' : 'stability-ai/sdxl'
 
     try {
-      // Generate image with automatic fallback
       const imageSize = dimensions.includes("1920x1080") ? "1792x1024" : "1024x1024"
-      const result = await generateImageWithFallback(enhancedPrompt, imageSize, "banner")
+      
+      // Generate image with the selected provider
+      const enhancedPrompt = enhancePrompt ? await enhancePromptForImage(prompt, style, colors) : prompt
+      const result = await generateImageWithFallback(
+        enhancedPrompt,
+        imageSize,
+        "banner"
+      )
+      
       imageUrl = result.imageUrl
       usedProvider = result.usedProvider
       fallbackUsed = result.fallbackUsed
       
-      // Set model based on provider
+      // Update model based on the actual provider used
       model = usedProvider === "openai" ? "dall-e-3" : 
               usedProvider === "flux" ? "stability-ai/sdxl" : 
               "unknown"
 
-      // Log which provider was used
       console.log(`✅ Generated banner using ${usedProvider}${fallbackUsed ? ' (fallback)' : ''}`)
       if (fallbackUsed) {
         console.log("⚠️ Primary provider failed, used fallback provider")
@@ -80,13 +96,14 @@ export async function POST(req: Request) {
     return Response.json({
       success: true,
       imageUrl,
-      prompt: enhancedPrompt,
+      prompt: enhancePrompt ? await enhancePromptForImage(prompt, style, colors) : prompt,
       provider: usedProvider,
       model,
       fallbackUsed,
       message: fallbackUsed
-        ? `Generated using ${usedProvider}${model ? ` (${model})` : ""} with fallback`
+        ? `Generated using fallback provider: ${usedProvider}${model ? ` (${model})` : ""}`
         : `Generated using ${usedProvider}${model ? ` (${model})` : ""}`,
+      promptEnhanced: enhancePrompt
     })
   } catch (error) {
     console.error("Banner generation error:", error)

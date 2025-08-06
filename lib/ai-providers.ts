@@ -704,12 +704,56 @@ async function generateImageWithFluxAI(prompt: string, size = "1024x1024"): Prom
   }
 }
 
+// Helper function to handle Flux AI fallback logic
+async function tryFluxAI(
+  finalPrompt: string,
+  size: string,
+  promptEnhanced: boolean,
+  originalError: unknown
+): Promise<{
+  imageUrl: string
+  usedProvider: string
+  fallbackUsed: boolean
+  promptEnhanced: boolean
+  enhancedPrompt: string
+}> {
+  try {
+    const { flux_api_key } = await getApiKeys()
+    if (!flux_api_key) {
+      throw new Error("FLUX_API_KEY_NOT_FOUND")
+    }
+    
+    console.log("🔄 Attempting image generation with Flux AI...")
+    const imageUrl = await generateImageWithFluxAI(finalPrompt, size)
+    console.log("✅ Successfully generated image using Flux AI")
+    
+    return {
+      imageUrl,
+      usedProvider: "flux",
+      fallbackUsed: true,
+      promptEnhanced,
+      enhancedPrompt: finalPrompt,
+    }
+  } catch (fluxError: unknown) {
+    console.error("❌ Flux AI fallback also failed:", fluxError)
+    
+    // If Flux AI failed due to quota, include that in the error
+    if (fluxError instanceof Error && fluxError.message === "FLUX_QUOTA_EXCEEDED") {
+      throw new Error("QUOTA_EXCEEDED")
+    }
+    
+    // Re-throw the original error if Flux AI fails
+    throw originalError
+  }
+}
+
 // Enhanced image generation with design-focused enhancement
 export async function generateImageWithFallback(
   originalPrompt: string,
   size = "1024x1024",
   designType: "logo" | "banner" | "poster" = "poster",
   additionalContext?: any,
+  preferredProvider: 'openai' | 'flux' = 'openai'
 ): Promise<{
   imageUrl: string
   usedProvider: string
@@ -732,58 +776,69 @@ export async function generateImageWithFallback(
   console.log(`🎨 Image prompt enhanced for ${designType}: ${promptEnhanced ? "Yes" : "No"}`)
 
   try {
-    console.log("🔄 Attempting image generation with OpenAI...")
-    try {
-      const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
-      console.log("✅ Successfully generated image using OpenAI")
-      return {
-        imageUrl,
-        usedProvider: "openai",
-        fallbackUsed: false,
-        promptEnhanced,
-        enhancedPrompt: finalPrompt,
-      }
-    } catch (openAIError) {
-      console.log("❌ OpenAI image generation failed, trying Flux AI...")
-      
-      // Try Flux AI as fallback
+    // Try the preferred provider first
+    if (preferredProvider === 'openai') {
       try {
-        const { flux_api_key } = await getApiKeys()
-        if (flux_api_key) {
-          console.log("🔄 Attempting image generation with Flux AI...")
-          const imageUrl = await generateImageWithFluxAI(finalPrompt, size)
-          console.log("✅ Successfully generated image using Flux AI")
+        console.log("🔄 Attempting image generation with OpenAI...")
+        const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
+        console.log("✅ Successfully generated image using OpenAI")
+        return {
+          imageUrl,
+          usedProvider: "openai",
+          fallbackUsed: false,
+          promptEnhanced,
+          enhancedPrompt: finalPrompt,
+        }
+      } catch (openAIError) {
+        console.log("❌ OpenAI image generation failed, trying Flux AI...")
+        return tryFluxAI(finalPrompt, size, promptEnhanced, openAIError)
+      }
+    } else {
+      // Try Flux AI first if it's the preferred provider
+      try {
+        console.log("🔄 Attempting image generation with Flux AI...")
+        const imageUrl = await generateImageWithFluxAI(finalPrompt, size)
+        console.log("✅ Successfully generated image using Flux AI")
+        return {
+          imageUrl,
+          usedProvider: "flux",
+          fallbackUsed: false,
+          promptEnhanced,
+          enhancedPrompt: finalPrompt,
+        }
+      } catch (fluxError) {
+        console.log("❌ Flux AI image generation failed, trying OpenAI...")
+        try {
+          const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
+          console.log("✅ Successfully generated image using OpenAI (fallback)")
           return {
             imageUrl,
-            usedProvider: "flux",
+            usedProvider: "openai",
             fallbackUsed: true,
             promptEnhanced,
             enhancedPrompt: finalPrompt,
           }
+        } catch (openAIError) {
+          // If both providers fail, re-throw the original error
+          console.error("❌ Both Flux AI and OpenAI failed")
+          if (fluxError instanceof Error && fluxError.message === "FLUX_QUOTA_EXCEEDED") {
+            throw new Error("QUOTA_EXCEEDED")
+          }
+          throw fluxError
         }
-        throw openAIError // Re-throw original error if no Flux key
-      } catch (fluxError: unknown) {
-        console.error("❌ Flux AI fallback also failed:", fluxError)
-        
-        // If Flux AI failed due to quota, include that in the error
-        if (fluxError instanceof Error && fluxError.message === "FLUX_QUOTA_EXCEEDED") {
-          throw new Error("QUOTA_EXCEEDED")
-        }
-        
-        throw openAIError // Re-throw the original error
       }
     }
   } catch (error) {
-    console.error("❌ OpenAI image generation failed:", error)
+    console.error("❌ Image generation failed:", error)
 
     const errorMessage = error instanceof Error ? error.message : "Unknown error"
 
     // Check if it's a quota/billing error
     if (errorMessage.includes("QUOTA_EXCEEDED") || errorMessage.includes("quota") || errorMessage.includes("billing")) {
-      console.log("💡 OpenAI quota exceeded, generating detailed description instead...")
+      console.log("💡 API quota exceeded, generating detailed description instead...")
 
       try {
-        // Generate a detailed visual description using OpenAI
+        // Generate a detailed visual description using the preferred provider
         const systemPrompt = `You are a world-class visual designer and art director with expertise in ${designType} design. Create extremely detailed visual descriptions that could be used by a designer to recreate the design perfectly.`
 
         const result = await generateDesignWithEnhancement(
@@ -797,7 +852,7 @@ export async function generateImageWithFallback(
 
         return {
           imageUrl: placeholderUrl,
-          usedProvider: result.usedProvider,
+          usedProvider: preferredProvider,
           fallbackUsed: true,
           promptEnhanced: true,
           isPlaceholder: true,

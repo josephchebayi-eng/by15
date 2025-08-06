@@ -17,6 +17,7 @@ export default function BannerGeneratorPage() {
   const [dimensions, setDimensions] = useState("1920x1080")
   const [style, setStyle] = useState("modern")
   const [colors, setColors] = useState("blue and white")
+  const [provider, setProvider] = useState<"openai" | "flux">("openai")
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedBanner, setGeneratedBanner] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +48,7 @@ export default function BannerGeneratorPage() {
           dimensions,
           style,
           colors,
+          provider, // Include selected provider
           enhancePrompt: true,
         }),
       })
@@ -252,26 +254,36 @@ export default function BannerGeneratorPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="dimensions" className="text-gray-300 font-mono">
-                    DIMENSIONS
-                  </Label>
+                  <Label htmlFor="dimensions">Dimensions</Label>
                   <Select value={dimensions} onValueChange={setDimensions}>
-                    <SelectTrigger className="bg-gray-900/80 border-teal-500/40 text-gray-200">
-                      <SelectValue />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select dimensions" />
                     </SelectTrigger>
-                    <SelectContent className="bg-black/90 backdrop-blur-xl border-teal-500/40">
-                      <SelectItem value="1920x1080">HD Banner (1920x1080)</SelectItem>
-                      <SelectItem value="1200x628">Facebook Cover (1200x628)</SelectItem>
-                      <SelectItem value="1584x396">LinkedIn Banner (1584x396)</SelectItem>
-                      <SelectItem value="1500x500">Twitter Header (1500x500)</SelectItem>
-                      <SelectItem value="728x90">Web Banner (728x90)</SelectItem>
-                      <SelectItem value="320x50">Mobile Banner (320x50)</SelectItem>
+                    <SelectContent>
+                      <SelectItem value="1920x1080">Wide (1920x1080)</SelectItem>
+                      <SelectItem value="1080x1920">Portrait (1080x1920)</SelectItem>
+                      <SelectItem value="1200x630">Social Media (1200x630)</SelectItem>
+                      <SelectItem value="1500x500">Header (1500x500)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="provider">AI Provider</Label>
+                  <Select value={provider} onValueChange={(value: "openai" | "flux") => setProvider(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select AI provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="openai">OpenAI (DALL-E 3)</SelectItem>
+                      <SelectItem value="flux">Flux AI (SDXL)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="style" className="text-gray-300 font-mono">
                     STYLE
