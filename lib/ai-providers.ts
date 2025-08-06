@@ -643,6 +643,67 @@ export async function generateImageWithOpenAI(prompt: string, size = "1024x1024"
   }
 }
 
+/**
+ * Generate an image using Flux AI (Together AI)
+ * @param prompt The prompt for image generation
+ * @param size The desired image size (default: 1024x1024)
+ * @returns The URL of the generated image
+ */
+async function generateImageWithFluxAI(prompt: string, size = "1024x1024"): Promise<string> {
+  try {
+    const { flux_api_key } = await getApiKeys()
+
+    if (!flux_api_key) {
+      throw new Error("Flux AI API key not configured")
+    }
+
+    console.log("🔄 Attempting Flux AI image generation...")
+
+    // Map standard size format to Together AI format
+    const togetherAISize = size === "1024x1024" ? "1024x1024" : 
+                         size === "1792x1024" ? "1024x1024" : // Fallback to square if not supported
+                         "1024x1024"
+
+    const response = await fetch("https://api.together.xyz/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${flux_api_key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+        prompt: prompt,
+        width: parseInt(togetherAISize.split('x')[0]),
+        height: parseInt(togetherAISize.split('x')[1]),
+        steps: 40,
+        seed: Math.floor(Math.random() * 1000000),
+        n: 1,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error("❌ Flux AI Image API error:", errorData)
+      
+      // Handle specific error cases
+      if (errorData.error?.message?.includes("quota")) {
+        throw new Error("FLUX_QUOTA_EXCEEDED")
+      }
+      
+      throw new Error(`Flux AI Image API error: ${errorData.error?.message || response.statusText}`)
+    }
+
+    const data = await response.json()
+    console.log("✅ Flux AI image generation successful")
+    
+    // Return the first image URL from the response
+    return data.data[0]?.url || ""
+  } catch (error) {
+    console.error("❌ Flux AI image generation error:", error)
+    throw error
+  }
+}
+
 // Enhanced image generation with design-focused enhancement
 export async function generateImageWithFallback(
   originalPrompt: string,
@@ -672,14 +733,45 @@ export async function generateImageWithFallback(
 
   try {
     console.log("🔄 Attempting image generation with OpenAI...")
-    const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
-    console.log("✅ Successfully generated image using OpenAI")
-    return {
-      imageUrl,
-      usedProvider: "openai",
-      fallbackUsed: false,
-      promptEnhanced,
-      enhancedPrompt: finalPrompt,
+    try {
+      const imageUrl = await generateImageWithOpenAI(finalPrompt, size)
+      console.log("✅ Successfully generated image using OpenAI")
+      return {
+        imageUrl,
+        usedProvider: "openai",
+        fallbackUsed: false,
+        promptEnhanced,
+        enhancedPrompt: finalPrompt,
+      }
+    } catch (openAIError) {
+      console.log("❌ OpenAI image generation failed, trying Flux AI...")
+      
+      // Try Flux AI as fallback
+      try {
+        const { flux_api_key } = await getApiKeys()
+        if (flux_api_key) {
+          console.log("🔄 Attempting image generation with Flux AI...")
+          const imageUrl = await generateImageWithFluxAI(finalPrompt, size)
+          console.log("✅ Successfully generated image using Flux AI")
+          return {
+            imageUrl,
+            usedProvider: "flux",
+            fallbackUsed: true,
+            promptEnhanced,
+            enhancedPrompt: finalPrompt,
+          }
+        }
+        throw openAIError // Re-throw original error if no Flux key
+      } catch (fluxError: unknown) {
+        console.error("❌ Flux AI fallback also failed:", fluxError)
+        
+        // If Flux AI failed due to quota, include that in the error
+        if (fluxError instanceof Error && fluxError.message === "FLUX_QUOTA_EXCEEDED") {
+          throw new Error("QUOTA_EXCEEDED")
+        }
+        
+        throw openAIError // Re-throw the original error
+      }
     }
   } catch (error) {
     console.error("❌ OpenAI image generation failed:", error)

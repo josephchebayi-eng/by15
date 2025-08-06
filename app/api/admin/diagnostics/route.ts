@@ -1,4 +1,4 @@
-import { checkProviderAvailability, testOpenRouterConnection } from "@/lib/ai-providers"
+import { checkProviderAvailability } from "@/lib/ai-providers"
 import { getApiKeys } from "@/lib/api-keys"
 
 export async function GET() {
@@ -8,16 +8,40 @@ export async function GET() {
     // Check provider availability
     const availability = await checkProviderAvailability()
 
-    // Test OpenRouter connection if key is available
-    let openrouterTest = null
-    if (availability.openrouter) {
-      openrouterTest = await testOpenRouterConnection()
+    // Test Flux AI connection if key is available
+    let fluxTest = null
+    if (availability.flux) {
+      // TODO: Implement Flux AI connection test
+      fluxTest = { success: false, message: "Flux AI test not yet implemented" }
     }
 
     // Get API keys for additional validation
     const keys = await getApiKeys()
 
-    const diagnostics = {
+    interface DiagnosticsData {
+      timestamp: string;
+      providers: {
+        openai: {
+          configured: boolean;
+          keyFormat: string;
+          keyLength: number;
+        };
+        flux: {
+          configured: boolean;
+          keyFormat: string;
+          keyLength: number;
+          connectionTest: any; // TODO: Add proper type for connection test
+        };
+      };
+      environment: {
+        nodeEnv: string | undefined;
+        siteUrl: string | undefined;
+        supabaseConfigured: boolean;
+      };
+      recommendations: string[];
+    }
+
+    const diagnostics: DiagnosticsData = {
       timestamp: new Date().toISOString(),
       providers: {
         openai: {
@@ -29,15 +53,15 @@ export async function GET() {
             : "❌ Not configured",
           keyLength: keys.openai_api_key?.length || 0,
         },
-        openrouter: {
-          configured: availability.openrouter,
-          keyFormat: keys.openrouter_api_key
-            ? keys.openrouter_api_key.startsWith("sk-or-")
+        flux: {
+          configured: availability.flux,
+          keyFormat: keys.flux_api_key
+            ? keys.flux_api_key.startsWith("sk-")
               ? "✅ Valid format"
-              : "⚠️ Should start with 'sk-or-'"
+              : "⚠️ Unexpected format"
             : "❌ Not configured",
-          keyLength: keys.openrouter_api_key?.length || 0,
-          connectionTest: openrouterTest,
+          keyLength: keys.flux_api_key?.length || 0,
+          connectionTest: fluxTest,
         },
       },
       environment: {
@@ -49,22 +73,18 @@ export async function GET() {
     }
 
     // Generate recommendations
-    if (!availability.openai && !availability.openrouter) {
+    if (!availability.openai && !availability.flux) {
       diagnostics.recommendations.push("❌ No AI providers configured. Please add API keys in the admin panel.")
     }
 
-    if (availability.openrouter && keys.openrouter_api_key && !keys.openrouter_api_key.startsWith("sk-or-")) {
+    if (availability.flux && keys.flux_api_key && !keys.flux_api_key.startsWith("sk-")) {
       diagnostics.recommendations.push(
-        "⚠️ OpenRouter API key format appears incorrect. Keys should start with 'sk-or-'.",
+        "⚠️ Flux AI API key format appears incorrect. Keys should start with 'sk-'"
       )
     }
 
-    if (openrouterTest && !openrouterTest.success) {
-      diagnostics.recommendations.push(`❌ OpenRouter connection failed: ${openrouterTest.error}`)
-    }
-
-    if (!process.env.NEXT_PUBLIC_SITE_URL) {
-      diagnostics.recommendations.push("⚠️ NEXT_PUBLIC_SITE_URL not set. This may cause issues with OpenRouter.")
+    if (fluxTest && !fluxTest.success) {
+      diagnostics.recommendations.push(`❌ Flux AI connection test failed: ${fluxTest.message || 'Unknown error'}`)
     }
 
     return Response.json({

@@ -243,14 +243,7 @@ export default function DiagnosticsPage() {
                           <Badge className="bg-red-500/20 text-red-300 border-red-500/30">UNAVAILABLE</Badge>
                         )}
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">OpenRouter</span>
-                        {diagnostics.availability.openrouter ? (
-                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">AVAILABLE</Badge>
-                        ) : (
-                          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">UNAVAILABLE</Badge>
-                        )}
-                      </div>
+
                     </div>
                   </div>
                   <div>
