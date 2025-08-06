@@ -41,14 +41,14 @@ interface DiagnosticsData {
   }
   availability: {
     openai: boolean
-    openrouter: boolean
+    flux: boolean
     hasAnyProvider: boolean
     diagnostics: {
       openai: string
-      openrouter: string
+      flux: string
     }
   }
-  openRouterTest: {
+  fluxTest: {
     success: boolean
     error?: string
     availableModels?: string[]
@@ -67,7 +67,7 @@ export default function DiagnosticsPage() {
     setError(null)
 
     try {
-      const response = await fetch("/api/test-connections")
+      const response = await fetch("/api/admin/diagnostics")
       const data = await response.json()
 
       if (data.success) {
@@ -124,7 +124,7 @@ export default function DiagnosticsPage() {
                   BrandForge
                 </span>
               </Link>
-              <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">DIAGNOSTICS</Badge>
+              <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">ADMIN DIAGNOSTICS</Badge>
             </div>
             <div className="flex items-center space-x-4">
               <Button
