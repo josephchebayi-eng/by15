@@ -772,34 +772,41 @@ export async function generateImageWithFallback(
 // Simplified provider availability check
 export async function checkProviderAvailability(): Promise<{
   openai: boolean
+  flux: boolean
   hasAnyProvider: boolean
   diagnostics: {
     openai: string
+    flux: string
   }
 }> {
   try {
-    const { openai_api_key } = await getApiKeys()
+    const { openai_api_key, flux_api_key } = await getApiKeys()
 
     const openaiAvailable = !!openai_api_key && openai_api_key.trim().length > 0
+    const fluxAvailable = !!flux_api_key && flux_api_key.trim().length > 0
 
     const diagnostics = {
       openai: openaiAvailable ? `✅ Key configured (${openai_api_key.substring(0, 7)}...)` : "❌ No API key configured",
+      flux: fluxAvailable ? `✅ Key configured (${flux_api_key.substring(0, 7)}...)` : "❌ No API key configured",
     }
 
     console.log("🔍 Provider availability check:", diagnostics)
 
     return {
       openai: openaiAvailable,
-      hasAnyProvider: openaiAvailable,
+      flux: fluxAvailable,
+      hasAnyProvider: openaiAvailable || fluxAvailable,
       diagnostics,
     }
   } catch (error) {
     console.error("❌ Error checking provider availability:", error)
     return {
       openai: false,
+      flux: false,
       hasAnyProvider: false,
       diagnostics: {
         openai: "❌ Error checking availability",
+        flux: "❌ Error checking availability",
       },
     }
   }

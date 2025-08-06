@@ -2,6 +2,7 @@ import { supabaseAdmin } from "./supabase"
 
 interface ApiKeys {
   openai_api_key: string
+  flux_api_key: string
 }
 
 export async function getApiKeys(): Promise<ApiKeys> {
@@ -11,30 +12,45 @@ export async function getApiKeys(): Promise<ApiKeys> {
       console.warn("Supabase not configured - returning empty API keys")
       return {
         openai_api_key: "",
-        openrouter_api_key: "",
+        flux_api_key: "",
       }
     }
 
     // Get API keys from Supabase secrets/vault
-    const { data: openaiKey, error: openaiError } = await supabaseAdmin
-      .from("secrets")
-      .select("value")
-      .eq("name", "openai_api_key")
-      .single()
+    const [
+      { data: openaiKey, error: openaiError },
+      { data: fluxKey, error: fluxError }
+    ] = await Promise.all([
+      supabaseAdmin
+        .from("secrets")
+        .select("value")
+        .eq("name", "openai_api_key")
+        .single(),
+      supabaseAdmin
+        .from("secrets")
+        .select("value")
+        .eq("name", "flux_api_key")
+        .single()
+    ])
 
     // Log errors for debugging but don't throw immediately
     if (openaiError) {
       console.error("Error retrieving OpenAI API key:", openaiError)
     }
+    if (fluxError) {
+      console.error("Error retrieving Flux API key:", fluxError)
+    }
 
     return {
       openai_api_key: openaiKey?.value || "",
+      flux_api_key: fluxKey?.value || ""
     }
   } catch (error) {
     console.error("Error fetching API keys:", error)
     // Return empty keys instead of throwing to allow graceful degradation
     return {
       openai_api_key: "",
+      flux_api_key: ""
     }
   }
 }
